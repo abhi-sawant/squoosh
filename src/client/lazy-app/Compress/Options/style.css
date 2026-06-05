@@ -93,6 +93,13 @@
   border-radius: 4px;
 }
 
+.scale-field {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.4em;
+}
+
 .title-and-buttons {
   grid-template-columns: 1fr;
   grid-auto-columns: max-content;

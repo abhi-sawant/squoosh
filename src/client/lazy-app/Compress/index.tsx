@@ -57,10 +57,23 @@ interface Side {
   loading: boolean;
 }
 
+/**
+ * Settings used to seed the right-hand side when Compress is opened from bulk
+ * mode (e.g. inside the comparison modal), so the live preview matches what
+ * bulk will produce. When omitted, Compress behaves exactly as before.
+ */
+export interface InitialSettings {
+  encoderState?: EncoderState;
+  quantize?: ProcessorState['quantize'];
+  /** Fraction (0–1) of the decoded image's own dimensions. */
+  resizeScale?: number;
+}
+
 interface Props {
   file: File;
   showSnack: SnackBarElement['showSnackbar'];
   onBack: () => void;
+  initialSettings?: InitialSettings;
 }
 
 interface State {
@@ -88,7 +101,7 @@ interface LoadingFileInfo {
   filename?: string;
 }
 
-async function decodeImage(
+export async function decodeImage(
   signal: AbortSignal,
   blob: Blob,
   workerBridge: WorkerBridge,
@@ -144,7 +157,7 @@ async function preprocessImage(
   return processedData;
 }
 
-async function processImage(
+export async function processImage(
   signal: AbortSignal,
   source: SourceImage,
   processorState: ProcessorState,
@@ -166,7 +179,7 @@ async function processImage(
   return result;
 }
 
-async function compressImage(
+export async function compressImage(
   signal: AbortSignal,
   image: ImageData,
   encodeData: EncoderState,
@@ -326,11 +339,32 @@ export default class Compress extends Component<Props, State> {
   private sideAbortControllers = [new AbortController(), new AbortController()];
   /** For debouncing calls to updateImage for each side. */
   private updateImageTimeout?: number;
+  /** Whether the initialSettings resize scale has been applied to the right side. */
+  private seededResize = false;
 
   constructor(props: Props) {
     super(props);
     this.widthQuery.addListener(this.onMobileWidthChange);
     this.sourceFile = props.file;
+
+    // When opened from bulk mode, seed the right side so the live preview
+    // matches the bulk config. This takes precedence over localStorage.
+    if (props.initialSettings) {
+      const { encoderState, quantize } = props.initialSettings;
+      let processorState = this.state.sides[1].latestSettings.processorState;
+      if (quantize) {
+        processorState = cleanMerge(processorState, 'quantize', quantize);
+      }
+      this.state = {
+        ...this.state,
+        sides: cleanSet(this.state.sides, '1.latestSettings', {
+          processorState,
+          encoderState:
+            encoderState ?? this.state.sides[1].latestSettings.encoderState,
+        }),
+      };
+    }
+
     this.queueUpdateImage({ immediate: true });
 
     import('../sw-bridge').then(({ mainAppLoaded }) => mainAppLoaded());
@@ -581,7 +615,10 @@ export default class Compress extends Component<Props, State> {
     if (immediate) {
       this.updateImage();
     } else {
-      this.updateImageTimeout = setTimeout(() => this.updateImage(), delay);
+      this.updateImageTimeout = self.setTimeout(
+        () => this.updateImage(),
+        delay,
+      );
     }
   }
 
@@ -704,15 +741,24 @@ export default class Compress extends Component<Props, State> {
         }
 
         // Set default resize values
+        const resizeScale = this.props.initialSettings?.resizeScale;
         this.setState((currentState) => {
           if (mainSignal.aborted) return {};
-          const sides = currentState.sides.map((side) => {
+          const sides = currentState.sides.map((side, sideIndex) => {
+            // When seeded from bulk mode, pre-enable resize on the right side at
+            // the chosen scale so the preview matches what bulk will produce.
+            const useScale =
+              sideIndex === 1 && !!resizeScale && !this.seededResize;
             const resizeState: Partial<ProcessorState['resize']> = {
-              width: decoded.width,
-              height: decoded.height,
+              width: useScale
+                ? Math.round(decoded.width * resizeScale!)
+                : decoded.width,
+              height: useScale
+                ? Math.round(decoded.height * resizeScale!)
+                : decoded.height,
               method: vectorImage ? 'vector' : 'lanczos3',
               // Disable resizing, to make it clearer to the user that something changed here
-              enabled: false,
+              enabled: useScale,
             };
             return cleanMerge(
               side,
@@ -722,6 +768,7 @@ export default class Compress extends Component<Props, State> {
           }) as [Side, Side];
           return { sides };
         });
+        this.seededResize = true;
       } catch (err) {
         if (err instanceof Error && err.name === 'AbortError') return;
         this.props.showSnack(`Source decoding error: ${err}`);

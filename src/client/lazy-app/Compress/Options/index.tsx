@@ -1,4 +1,4 @@
-import { h, Component } from 'preact';
+import { h, Component, Fragment } from 'preact';
 
 import * as style from './style.css';
 import 'add-css:./style.css';
@@ -31,6 +31,16 @@ interface Props {
   onCopyToOtherSideClick(index: 0 | 1): void;
   onSaveSideSettingsClick(index: 0 | 1): void;
   onImportSideSettingsClick(index: 0 | 1): void;
+  /**
+   * Bulk mode: a single shared config across many images. Hides the
+   * per-side copy/save/import buttons and the "Original Image" option, and
+   * swaps the full resize controls (preset/width/height) for a single
+   * percentage scale, since images have differing aspect ratios.
+   */
+  bulk?: boolean;
+  /** Bulk resize scale as a percentage (1–100); only used when `bulk`. */
+  resizeScale?: number;
+  onResizeScaleChange?(scale: number): void;
 }
 
 interface State {
@@ -135,6 +145,14 @@ export default class Options extends Component<Props, State> {
     this.props.onEncoderOptionsChange(this.props.index, newOptions);
   };
 
+  private onScaleInput = (event: Event) => {
+    const el = event.currentTarget as HTMLInputElement;
+    let percent = Number(el.value);
+    if (!Number.isFinite(percent)) return;
+    percent = Math.min(100, Math.max(1, percent));
+    this.props.onResizeScaleChange?.(percent);
+  };
+
   private onCopyToOtherSideClick = () => {
     this.props.onCopyToOtherSideClick(this.props.index);
   };
@@ -148,7 +166,7 @@ export default class Options extends Component<Props, State> {
   };
 
   render(
-    { source, encoderState, processorState }: Props,
+    { source, encoderState, processorState, bulk, resizeScale }: Props,
     { supportedEncoderMap }: State,
   ) {
     const encoder = encoderState && encoderMap[encoderState.type];
@@ -169,43 +187,50 @@ export default class Options extends Component<Props, State> {
               <h3 class={style.optionsTitle}>
                 <div class={style.titleAndButtons}>
                   Edit
-                  <button
-                    class={style.copyOverButton}
-                    title="Copy settings to other side"
-                    onClick={this.onCopyToOtherSideClick}
-                  >
-                    <SwapIcon />
-                  </button>
-                  <button
-                    class={style.saveButton}
-                    title="Save side settings"
-                    onClick={this.onSaveSideSettingClick}
-                  >
-                    <SaveIcon />
-                  </button>
-                  <button
-                    class={
-                      style.importButton +
-                      ' ' +
-                      (!this.state.leftSideSettings && this.props.index === 0
-                        ? style.buttonOpacity
-                        : '') +
-                      ' ' +
-                      (!this.state.rightSideSettings && this.props.index === 1
-                        ? style.buttonOpacity
-                        : '')
-                    }
-                    title="Import saved side settings"
-                    onClick={this.onImportSideSettingsClick}
-                    disabled={
-                      // Disabled if this side's settings haven't been saved
-                      (!this.state.leftSideSettings &&
-                        this.props.index === 0) ||
-                      (!this.state.rightSideSettings && this.props.index === 1)
-                    }
-                  >
-                    <ImportIcon />
-                  </button>
+                  {!bulk && (
+                    <Fragment>
+                      <button
+                        class={style.copyOverButton}
+                        title="Copy settings to other side"
+                        onClick={this.onCopyToOtherSideClick}
+                      >
+                        <SwapIcon />
+                      </button>
+                      <button
+                        class={style.saveButton}
+                        title="Save side settings"
+                        onClick={this.onSaveSideSettingClick}
+                      >
+                        <SaveIcon />
+                      </button>
+                      <button
+                        class={
+                          style.importButton +
+                          ' ' +
+                          (!this.state.leftSideSettings &&
+                          this.props.index === 0
+                            ? style.buttonOpacity
+                            : '') +
+                          ' ' +
+                          (!this.state.rightSideSettings &&
+                          this.props.index === 1
+                            ? style.buttonOpacity
+                            : '')
+                        }
+                        title="Import saved side settings"
+                        onClick={this.onImportSideSettingsClick}
+                        disabled={
+                          // Disabled if this side's settings haven't been saved
+                          (!this.state.leftSideSettings &&
+                            this.props.index === 0) ||
+                          (!this.state.rightSideSettings &&
+                            this.props.index === 1)
+                        }
+                      >
+                        <ImportIcon />
+                      </button>
+                    </Fragment>
+                  )}
                 </div>
               </h3>
               <label class={style.sectionEnabler}>
@@ -218,13 +243,33 @@ export default class Options extends Component<Props, State> {
               </label>
               <Expander>
                 {processorState.resize.enabled ? (
-                  <ResizeOptionsComponent
-                    isVector={Boolean(source && source.vectorImage)}
-                    inputWidth={source ? source.preprocessed.width : 1}
-                    inputHeight={source ? source.preprocessed.height : 1}
-                    options={processorState.resize}
-                    onChange={this.onResizeOptionsChange}
-                  />
+                  bulk ? (
+                    <div class={style.optionOneCell}>
+                      <label class={style.optionTextFirst}>
+                        Scale
+                        <span class={style.scaleField}>
+                          <input
+                            type="number"
+                            class={style.textField}
+                            min={1}
+                            max={100}
+                            step={1}
+                            value={resizeScale}
+                            onInput={this.onScaleInput}
+                          />
+                          %
+                        </span>
+                      </label>
+                    </div>
+                  ) : (
+                    <ResizeOptionsComponent
+                      isVector={Boolean(source && source.vectorImage)}
+                      inputWidth={source ? source.preprocessed.width : 1}
+                      inputHeight={source ? source.preprocessed.height : 1}
+                      options={processorState.resize}
+                      onChange={this.onResizeOptionsChange}
+                    />
+                  )
                 ) : null}
               </Expander>
 
@@ -257,9 +302,11 @@ export default class Options extends Component<Props, State> {
               onChange={this.onEncoderTypeChange}
               large
             >
-              <option value="identity">{`Original Image ${
-                this.props.source ? `(${this.props.source.file.name})` : ''
-              }`}</option>
+              {!bulk && (
+                <option value="identity">{`Original Image ${
+                  this.props.source ? `(${this.props.source.file.name})` : ''
+                }`}</option>
+              )}
               {Object.entries(supportedEncoderMap).map(([type, encoder]) => (
                 <option value={type}>{encoder.meta.label}</option>
               ))}
