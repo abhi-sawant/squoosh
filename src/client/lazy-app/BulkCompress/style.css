@@ -8,7 +8,9 @@
   grid-template-areas:
     'grid'
     'opts';
-  background: var(--off-black);
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 2"><path d="M1 2V0h1v1H0v1z" fill-opacity=".025"/></svg>');
+  background-size: 20px 20px;
+  background-color: #2f2f2f;
 
   @media (min-width: 600px) {
     grid-template-rows: 1fr;
@@ -69,69 +71,128 @@
 
 .options-area {
   grid-area: opts;
-  display: grid;
-  grid-template-rows: 1fr max-content;
+  --options-radius: 7px;
+  display: flex;
+  flex-direction: column;
+  /* Anchor the panel to the bottom edge and let it grow upward as sections
+   * expand — mirroring the single-image editor's floating options panel. */
+  justify-content: flex-end;
   overflow: hidden;
   max-height: 45vh;
 
   @media (min-width: 600px) {
     max-height: none;
-    box-shadow: -2px 0 12px rgba(0, 0, 0, 0.3);
   }
 }
 
-/* Provide the theme variables the reused single-image Options panel expects. */
+/* Provide the theme variables the reused single-image Options panel expects.
+ * Mirror the single editor's right-hand panel (.options-2-theme) so the bulk
+ * config UI is blue, and inherit the same base color/font-size as .options so
+ * the panel's em-based row spacing matches the single-image flow. */
 .options-theme {
-  --main-theme-color: var(--pink);
-  --hot-theme-color: var(--hot-pink);
-  --header-text-color: var(--white);
-  --scroller-radius: 0;
+  --main-theme-color: var(--blue);
+  --hot-theme-color: var(--deep-blue);
+  --header-text-color: var(--dark-text);
+  --scroller-radius: var(--options-radius) var(--options-radius) 0 0;
+  color: var(--white);
+  font-size: 1.2rem;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  /* Content-height by default; shrinks (and the scroller scrolls) only when
+   * the expanded sections are taller than the available space. */
+  min-height: 0;
 
-  /* Let the reused Options scroller fill the available height and scroll. */
   & > * {
-    flex: 1 1 auto;
     min-height: 0;
   }
 }
 
 .actions {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 16px;
-  background: var(--pink);
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 16px;
+  /* Blend into the floating card so the FABs read as part of it. */
+  background: var(--off-black);
+  /* Stay anchored at the bottom of the floating card. */
+  flex-shrink: 0;
+  border-radius: 0 0 var(--options-radius) var(--options-radius);
 }
 
-.convert-button,
-.download-button {
+/* Circular blob FAB, matching the single-image editor's download button. */
+.fab {
   composes: unbutton from global;
-  padding: 12px 16px;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 700;
-  text-align: center;
+  --size: 56px;
+  width: var(--size);
+  height: var(--size);
+  position: relative;
+  display: grid;
+  place-items: center;
   cursor: pointer;
-  transition: opacity 0.2s, background 0.2s;
+  transition: opacity 0.2s;
+
+  loading-spinner {
+    grid-area: 1 / 1;
+    position: relative;
+    --color: var(--white);
+    --size: 24px;
+  }
 }
 
-.convert-button {
-  background: var(--white);
-  color: var(--hot-pink);
-}
-
-.download-button {
-  background: var(--hot-pink);
-  color: var(--white);
-  box-shadow: inset 0 0 0 2px var(--white);
-}
-
-.convert-button:disabled,
-.download-button:disabled {
-  opacity: 0.5;
+.fab:disabled {
+  opacity: 0.4;
   cursor: default;
+}
+
+.fab-blobs {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+
+  path {
+    fill: var(--deep-blue);
+    opacity: 0.85;
+  }
+}
+
+.fab-icon {
+  grid-area: 1 / 1;
+
+  svg {
+    --icon-size: 23px;
+    width: var(--icon-size);
+    height: var(--icon-size);
+    fill: var(--white);
+    display: block;
+    /* Lift the icon above the absolutely-positioned blob backdrop. */
+    position: relative;
+    animation: fab-icon-enter 0.2s;
+  }
+}
+
+/* Busy state (converting / zipping): hide the icon, the spinner shows instead. */
+.fab-busy {
+  composes: fab;
+  pointer-events: none;
+
+  .fab-icon svg {
+    opacity: 0;
+  }
+}
+
+@keyframes fab-icon-enter {
+  from {
+    opacity: 0;
+    transform: rotate(-90deg);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0);
+  }
 }
 
 .modal {
