@@ -1,133 +1,182 @@
 import { h } from 'preact';
 
-const Icon = (props: preact.JSX.HTMLAttributes) => (
+/**
+ * One icon family: 24x24 grid, 2px round-stroke outlines, no fills.
+ * Stroke attributes live on an inner <g> so they win over any `fill`/`stroke`
+ * inherited from CSS on the <svg>; colour comes from `currentColor`.
+ */
+const Glyph = ({ children }: { children?: preact.ComponentChildren }) => (
+  <g
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    {children}
+  </g>
+);
+
+const Icon = ({ children, ...props }: preact.JSX.HTMLAttributes) => (
   // @ts-ignore - TS bug https://github.com/microsoft/TypeScript/issues/16019
   <svg
     width="24"
     height="24"
     viewBox="0 0 24 24"
-    fill="currentColor"
+    fill="none"
+    stroke="currentColor"
+    aria-hidden="true"
+    focusable="false"
     {...props}
-  />
+  >
+    <Glyph>{children}</Glyph>
+  </svg>
 );
 
-export const ToggleAliasingIcon = (props: preact.JSX.HTMLAttributes) => (
+/** Same family, but without a fixed size (sized by the surrounding CSS). */
+const FlexIcon = ({ children }: { children?: preact.ComponentChildren }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <Glyph>{children}</Glyph>
+  </svg>
+);
+
+type IconProps = preact.JSX.HTMLAttributes;
+
+/** Pixel grid, smooth. */
+export const ToggleAliasingIcon = (props: IconProps) => (
   <Icon {...props}>
-    <circle
-      cx="12"
-      cy="12"
-      r="8"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-    />
+    <rect x="4" y="4" width="16" height="16" rx="4" />
+    <path d="M12 4v16M4 12h16" />
   </Icon>
 );
 
-export const ToggleAliasingActiveIcon = (props: preact.JSX.HTMLAttributes) => (
+/** Pixel grid, sharp pixels on. */
+export const ToggleAliasingActiveIcon = (props: IconProps) => (
   <Icon {...props}>
-    <path d="M12 3h5v2h2v2h2v5h-2V9h-2V7h-2V5h-3V3M21 12v5h-2v2h-2v2h-5v-2h3v-2h2v-2h2v-3h2M12 21H7v-2H5v-2H3v-5h2v3h2v2h2v2h3v2M3 12V7h2V5h2V3h5v2H9v2H7v2H5v3H3" />
+    <rect x="4" y="4" width="16" height="16" rx="4" />
+    <path d="M12 4v16M4 12h16" />
+    <path d="M7.5 7.5h.01M16.5 16.5h.01" stroke-width="3" />
   </Icon>
 );
 
-export const ToggleBackgroundIcon = (props: preact.JSX.HTMLAttributes) => (
+/** Checkerboard square, plain background. */
+export const ToggleBackgroundIcon = (props: IconProps) => (
   <Icon {...props}>
-    <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm2 4v-2H3c0 1.1.9 2 2 2zM3 9h2V7H3v2zm12 12h2v-2h-2v2zm4-18H9a2 2 0 0 0-2 2v10c0 1.1.9 2 2 2h10a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 12H9V5h10v10zm-8 6h2v-2h-2v2zm-4 0h2v-2H7v2z" />
+    <rect x="3" y="3" width="18" height="18" rx="4" />
+    <path d="M3 12h9V3M12 12h9v9h-9z" />
   </Icon>
 );
 
-export const ToggleBackgroundActiveIcon = (
-  props: preact.JSX.HTMLAttributes,
-) => (
+/** Checkerboard square, checker background on. */
+export const ToggleBackgroundActiveIcon = (props: IconProps) => (
   <Icon {...props}>
-    <path d="M9 7H7v2h2V7zm0 4H7v2h2v-2zm0-8a2 2 0 0 0-2 2h2V3zm4 12h-2v2h2v-2zm6-12v2h2a2 2 0 0 0-2-2zm-6 0h-2v2h2V3zM9 17v-2H7c0 1.1.9 2 2 2zm10-4h2v-2h-2v2zm0-4h2V7h-2v2zm0 8a2 2 0 0 0 2-2h-2v2zM5 7H3v12c0 1.1.9 2 2 2h12v-2H5V7zm10-2h2V3h-2v2zm0 12h2v-2h-2v2z" />
+    <rect x="3" y="3" width="18" height="18" rx="4" />
+    <path d="M3 12h18M12 3v18" />
+    <path d="M7.5 7.5h.01M16.5 16.5h.01" stroke-width="3" />
   </Icon>
 );
 
-export const RotateIcon = (props: preact.JSX.HTMLAttributes) => (
+export const RotateIcon = (props: IconProps) => (
   <Icon {...props}>
-    <path d="M15.6 5.5L11 1v3a8 8 0 0 0 0 16v-2a6 6 0 0 1 0-12v4l4.5-4.5zm4.3 5.5a8 8 0 0 0-1.6-3.9L17 8.5c.5.8.9 1.6 1 2.5h2zM13 17.9v2a8 8 0 0 0 3.9-1.6L15.5 17c-.8.5-1.6.9-2.5 1zm3.9-2.4l1.4 1.4A8 8 0 0 0 20 13h-2c-.1.9-.5 1.7-1 2.5z" />
+    <path d="M21 12a9 9 0 1 1-3-6.7M21 4v5h-5" />
   </Icon>
 );
 
-export const AddIcon = (props: preact.JSX.HTMLAttributes) => (
+export const AddIcon = (props: IconProps) => (
   <Icon {...props}>
-    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+    <path d="M12 5v14M5 12h14" />
   </Icon>
 );
 
-export const RemoveIcon = (props: preact.JSX.HTMLAttributes) => (
+export const RemoveIcon = (props: IconProps) => (
   <Icon {...props}>
-    <path d="M19 13H5v-2h14v2z" />
+    <path d="M5 12h14" />
   </Icon>
 );
 
-export const UncheckedIcon = (props: preact.JSX.HTMLAttributes) => (
+export const UncheckedIcon = (props: IconProps) => (
   <Icon {...props}>
-    <path d="M21.3 2.7v18.6H2.7V2.7h18.6m0-2.7H2.7A2.7 2.7 0 0 0 0 2.7v18.6A2.7 2.7 0 0 0 2.7 24h18.6a2.7 2.7 0 0 0 2.7-2.7V2.7A2.7 2.7 0 0 0 21.3 0z" />
+    <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
   </Icon>
 );
 
-export const CheckedIcon = (props: preact.JSX.HTMLAttributes) => (
+export const CheckedIcon = (props: IconProps) => (
   <Icon {...props}>
-    <path d="M21.3 0H2.7A2.7 2.7 0 0 0 0 2.7v18.6A2.7 2.7 0 0 0 2.7 24h18.6a2.7 2.7 0 0 0 2.7-2.7V2.7A2.7 2.7 0 0 0 21.3 0zm-12 18.7L2.7 12l1.8-1.9L9.3 15 19.5 4.8l1.8 1.9z" />
+    <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
+    <path d="m8 12.5 3 3 5-6" />
   </Icon>
 );
 
-export const ExpandIcon = (props: preact.JSX.HTMLAttributes) => (
+export const ExpandIcon = (props: IconProps) => (
   <Icon {...props}>
-    <path d="M16.6 8.6L12 13.2 7.4 8.6 6 10l6 6 6-6z" />
+    <path d="m6 9 6 6 6-6" />
   </Icon>
 );
 
+/** Back arrow, pointing left. */
+export const BackIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path d="M19 12H5M11 6l-6 6 6 6" />
+  </Icon>
+);
+
+/** Chevron pointing down. Sized by CSS. */
 export const Arrow = () => (
-  <svg viewBox="0 -1.95 9.8 9.8">
-    <path d="M8.2.2a1 1 0 011.4 1.4l-4 4a1 1 0 01-1.4 0l-4-4A1 1 0 011.6.2l3.3 3.3L8.2.2z" />
-  </svg>
+  <FlexIcon>
+    <path d="m6 9 6 6 6-6" />
+  </FlexIcon>
 );
 
+/** Arrow into a tray. Sized by CSS. */
 export const DownloadIcon = () => (
-  <svg viewBox="0 0 23.9 24.9">
-    <path d="M6.6 2.7h-4v13.2h2.7A2.7 2.7 0 018 18.6a2.7 2.7 0 002.6 2.6h2.7a2.7 2.7 0 002.6-2.6 2.7 2.7 0 012.7-2.7h2.6V2.7h-4a1.3 1.3 0 110-2.7h4A2.7 2.7 0 0124 2.7v18.5a2.7 2.7 0 01-2.7 2.7H2.7A2.7 2.7 0 010 21.2V2.7A2.7 2.7 0 012.7 0h4a1.3 1.3 0 010 2.7zm4 7.4V1.3a1.3 1.3 0 112.7 0v8.8L15 8.4a1.3 1.3 0 011.9 1.8l-4 4a1.3 1.3 0 01-1.9 0l-4-4A1.3 1.3 0 019 8.4z" />
-  </svg>
+  <FlexIcon>
+    <path d="M12 4v11M7 10l5 5 5-5M5 20h14" />
+  </FlexIcon>
 );
 
+/** Two arrows chasing each other. Sized by CSS. */
 export const ConvertIcon = () => (
-  <svg viewBox="0 0 24 24">
-    <path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z" />
-  </svg>
+  <FlexIcon>
+    <path d="M20 11a8 8 0 0 0-14-4.5L4 8.5M4 4v4.5h4.5M4 13a8 8 0 0 0 14 4.5l2-2M20 20v-4.5h-4.5" />
+  </FlexIcon>
 );
 
+/** Left-right arrows. Sized by CSS. */
 export const SwapIcon = () => (
-  <svg viewBox="0 0 18 14">
-    <path d="M5.5 3.6v6.8L2.1 7l3.4-3.4M7 0L0 7l7 7V0zm4 0v14l7-7-7-7z" />
-  </svg>
+  <FlexIcon>
+    <path d="M4 8h14M14 4l4 4-4 4M20 16H6M10 12l-4 4 4 4" />
+  </FlexIcon>
 );
 
 export const SaveIcon = () => (
-  <svg viewBox="0 0 24 24">
-    <g
-      fill="none"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="2"
-    >
-      <path d="M12.501 20.93c-.866.25-1.914-.166-2.176-1.247a1.724 1.724 0 0 0-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066-2.573c-.94-1.543.826-3.31 2.37-2.37c1 .608 2.296.07 2.572-1.065c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.074.26 1.49 1.296 1.252 2.158M19 22v-6m3 3l-3-3l-3 3" />
-      <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0-6 0" />
-    </g>
-  </svg>
+  <FlexIcon>
+    <path d="M5 4h11l3 3v13H5zM8 4v5h7V4M8 20v-6h8v6" />
+  </FlexIcon>
 );
 
 export const ImportIcon = () => (
-  <svg viewBox="0 0 24 24">
-    <g
-      fill="none"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="2"
-    >
-      <path d="M12.52 20.924c-.87.262-1.93-.152-2.195-1.241a1.724 1.724 0 0 0-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066-2.573c-.94-1.543.826-3.31 2.37-2.37c1 .608 2.296.07 2.572-1.065c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.088.264 1.502 1.323 1.242 2.192M19 16v6m3-3l-3 3l-3-3" />
-      <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0-6 0" />
-    </g>
-  </svg>
+  <FlexIcon>
+    <path d="M12 15V4M7 9l5-5 5 5M5 20h14" />
+  </FlexIcon>
+);
+
+/** Small leaf badge shown when a side finishes compressing. */
+export const LeafIcon = () => (
+  <FlexIcon>
+    <path d="M5 19C5 10 10 5 19 5c0 9-5 14-14 14Z" />
+    <path d="M8 16c3-4.5 6-7.5 10-9" />
+  </FlexIcon>
+);
+
+export const LockIcon = () => (
+  <FlexIcon>
+    <rect x="5" y="11" width="14" height="10" rx="3" />
+    <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+  </FlexIcon>
 );

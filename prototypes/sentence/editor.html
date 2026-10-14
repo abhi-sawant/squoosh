@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Squoosh: your picture</title>
+<meta name="theme-color" content="#FBFCFE">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="editor">
+<a class="skip" href="#main">Skip to main content</a>
+<header class="top">
+  <a class="back" href="index.html"><svg class="i" aria-hidden="true"><use href="#i-back"/></svg>Start over</a>
+  <a class="brand" href="index.html" aria-label="Squoosh home">Squoosh</a>
+  <p class="private"><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg><span>Stays on your device</span></p>
+</header>
+
+<main id="main" class="editor">
+  <h1 class="sr-only">Make your picture smaller</h1>
+
+  <section class="preview" aria-label="Preview of your picture">
+    <p class="file-line"><b id="fileName">photo.jpg</b><span id="fileDims">1400 × 541</span><span id="fileSize">2.8 MB</span><span id="approx" hidden>Preview is approximated. Open this page through a local web server for real encoding.</span></p>
+    <div class="cmp" id="cmp">
+      <div class="cmp-viewport">
+        <div class="cmp-stage bg-checker">
+          <div class="cmp-layer right"><img src="../assets/photo.jpg" alt="Your picture with the new settings applied"><span class="cmp-tag" id="tagR">WebP</span></div>
+          <div class="cmp-layer left"><img src="../assets/photo.jpg" alt="Your original picture"><span class="cmp-tag" id="tagL">Original</span></div>
+          <div class="cmp-handle" role="slider" tabindex="0" aria-label="Compare original and result. Use the left and right arrow keys." aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="knob"><svg class="i" aria-hidden="true"><use href="#i-arrowsplit"/></svg></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="toolbar" role="toolbar" aria-label="Preview tools">
+      <div class="zoom" role="group" aria-label="Zoom">
+        <button type="button" class="tool" id="zoomOut" aria-label="Zoom out"><svg class="i" aria-hidden="true"><use href="#i-minus"/></svg></button>
+        <input id="zoomInput" type="text" inputmode="numeric" value="100%" aria-label="Zoom percentage">
+        <button type="button" class="tool" id="zoomIn" aria-label="Zoom in"><svg class="i" aria-hidden="true"><use href="#i-plus"/></svg></button>
+      </div>
+      <button type="button" class="tool" id="rotate"><svg class="i" aria-hidden="true"><use href="#i-rotate"/></svg><span class="lbl">Rotate</span></button>
+      <button type="button" class="tool" id="layout" aria-pressed="false"><svg class="i" aria-hidden="true"><use href="#i-split"/></svg><span class="lbl">Side by side</span></button>
+      <button type="button" class="tool" id="bg" aria-pressed="false"><svg class="i" aria-hidden="true"><use href="#i-checker"/></svg><span class="lbl">Plain background</span></button>
+      <button type="button" class="tool" id="smooth" aria-pressed="false"><svg class="i" aria-hidden="true"><use href="#i-pixel"/></svg><span class="lbl">Sharp pixels</span></button>
+      <span class="spacer"></span>
+      <button type="button" class="tool" id="add"><svg class="i" aria-hidden="true"><use href="#i-plus"/></svg><span class="lbl">Add another</span></button>
+      <input type="file" id="addFile" accept="image/*" multiple hidden>
+    </div>
+  </section>
+
+  <section class="compose" aria-labelledby="sh">
+    <h2 id="sh" class="sr-only">Your settings, as a sentence</h2>
+    <p class="sentence" id="sentence" role="group" aria-labelledby="sh">Save my <span id="sentenceNoun">picture</span> as
+      <button type="button" class="blank" data-key="format"><span class="blank-text">WebP</span><svg class="i" aria-hidden="true"><use href="#i-chev"/></svg></button>
+      at <button type="button" class="blank" data-key="quality"><span class="blank-text">Balanced</span><svg class="i" aria-hidden="true"><use href="#i-chev"/></svg></button> quality,
+      <button type="button" class="blank" data-key="resize"><span class="blank-text">no resize</span><svg class="i" aria-hidden="true"><use href="#i-chev"/></svg></button>,
+      <button type="button" class="blank" data-key="colours"><span class="blank-text">all colours kept</span><svg class="i" aria-hidden="true"><use href="#i-chev"/></svg></button>.</p>
+    <p class="hint-line">Tap any highlighted word to change it. The picture above updates straight away.</p>
+  </section>
+
+  <div class="result-bar sticky">
+    <p class="result" id="result"><span>That makes it <span class="good">92% smaller</span>: <span class="num">2.8 MB → 214 KB</span>.<small>Stays on your device. Nothing is uploaded.</small></span></p>
+    <button type="button" class="btn primary" id="download"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>Download</button>
+  </div>
+
+  <details class="more" id="more">
+    <summary><span>More options</span><svg class="i" aria-hidden="true"><use href="#i-chev"/></svg></summary>
+    <div class="more-body">
+      <section class="side" id="side-left" aria-label="Original side options"></section>
+      <section class="side" id="side-right" aria-label="Result side options"></section>
+    </div>
+  </details>
+</main>
+
+<div id="snack" class="snack" role="status"></div>
+<div id="live" class="sr-only" aria-live="polite"></div>
+<script src="app.js"></script>
+</body>
+</html>

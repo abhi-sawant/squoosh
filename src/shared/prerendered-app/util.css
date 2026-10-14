@@ -17,8 +17,13 @@
     padding: 0;
     margin: 0;
 
-    &:focus {
+    &:focus:not(:focus-visible) {
       outline: none;
+    }
+
+    &:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
     }
   }
 }

@@ -61,7 +61,7 @@ const Index: FunctionalComponent<Props> = () => (
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <link rel="shortcut icon" href={favicon} />
       <link rel="apple-touch-icon" href={ogImage} />
-      <meta name="theme-color" content="#ff3385" />
+      <meta name="theme-color" content="#eef6f0" />
       <link rel="manifest" href="/manifest.json" />
       <link rel="canonical" href={siteOrigin} />
       <style

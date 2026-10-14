@@ -98,7 +98,8 @@ export class Options extends Component<Props, State> {
           lossyPalette: optionState.lossless ? optionState.slightLoss : false,
           decodingSpeedTier: optionState.decodingSpeedTier,
           photonNoiseIso: optionState.photonNoiseIso,
-          lossyModular: optionState.quality < 7 ? true : optionState.alternativeLossy,
+          lossyModular:
+            optionState.quality < 7 ? true : optionState.alternativeLossy,
         };
 
         // Updating options, so we don't recalculate in getDerivedStateFromProps.
@@ -155,7 +156,7 @@ export class Options extends Component<Props, State> {
         <Expander>
           {!lossless && (
             <div>
-              <div class={style.optionOneCell}>
+              <div class={`${style.optionOneCell} ${style.qualityRow}`}>
                 <Range
                   min="0"
                   max="99.9"

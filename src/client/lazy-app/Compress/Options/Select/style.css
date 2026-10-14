@@ -3,34 +3,48 @@
 }
 
 .builtin-select {
-  background: var(--black);
-  border-radius: 4px;
-  font: inherit;
-  padding: 7px 0;
-  padding-right: 25px;
-  padding-left: 10px;
+  display: block;
+  box-sizing: border-box;
+  height: 44px;
+  width: 100%;
+  min-width: 0;
+  padding: 0 44px 0 14px;
+  font: 500 1rem var(--font-body);
+  color: var(--ink);
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231f3a2d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 20px;
+  border: 2px solid var(--line);
+  border-radius: 16px;
   -webkit-appearance: none;
   -moz-appearance: none;
-  border: none;
-  color: #fff;
-  width: 100%;
+  appearance: none;
+  cursor: pointer;
+  text-overflow: ellipsis;
+  transition: border-color 200ms var(--ease);
+
+  &:hover {
+    border-color: var(--leaf);
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 }
 
+/* The caret is a background image now; this legacy element stays hidden. */
 .arrow {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  fill: #fff;
-  width: 10px;
-  pointer-events: none;
+  display: none;
 }
 
 .large {
-  padding: 10px 35px 10px 10px;
-  background: var(--dark-gray);
-
-  & .arrow {
-    right: 13px;
-  }
+  height: 48px;
 }

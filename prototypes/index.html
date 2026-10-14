@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Squoosh redesign candidates</title>
+<style>
+  :root { --bg:#f6f6f4; --ink:#161616; --muted:#5b5b5b; --line:#d9d9d4; --focus:#1a56ff; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#141414; --ink:#f1f1ee; --muted:#a3a3a0; --line:#2e2e2c; --focus:#7da2ff; } }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; }
+  main { max-width:1100px; margin:0 auto; padding:48px 16px 64px; }
+  h1 { font-size:clamp(1.75rem,4vw,2.5rem); line-height:1.1; margin:0 0 12px; letter-spacing:-0.01em; }
+  .lede { color:var(--muted); max-width:62ch; margin:0 0 40px; }
+  .cand { display:grid; grid-template-columns:minmax(0,1fr); gap:8px 32px; padding:28px 0; border-top:1px solid var(--line); }
+  @media (min-width:800px) { .cand { grid-template-columns:minmax(0,5fr) minmax(0,7fr); } }
+  h2 { font-size:1.5rem; margin:0 0 6px; }
+  h2.grp { font-size:1rem; color:var(--muted); margin:40px 0 8px; font-weight:600; }
+  .cand p { margin:0 0 8px; color:var(--muted); max-width:56ch; }
+  .cand p strong { color:var(--ink); font-weight:600; }
+  ul { list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:8px; align-content:start; }
+  a.btn { display:inline-flex; align-items:center; min-height:44px; padding:0 18px; border:1px solid var(--ink); border-radius:6px; color:var(--ink); text-decoration:none; font-weight:600; }
+  a.btn:hover { background:var(--ink); color:var(--bg); }
+  a:focus-visible { outline:3px solid var(--focus); outline-offset:2px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Squoosh redesign: six candidates</h1>
+  <p class="lede">Each candidate is a static prototype covering every screen: start, single-image editor, and bulk convert. Open the same three screens in each and compare at desktop and phone widths. Pick one and the real app gets rebuilt in that world.</p>
+
+<h2 class="grp">Round 2: calm and friendly</h2>
+
+  <section class="cand" aria-labelledby="r1">
+    <div>
+      <h2 id="r1">Clear</h2>
+      <p><strong>Obvious, step by step.</strong> A calm utility with one friendly blue. A Choose, Adjust, Save line guides every screen, with plain presets up front and advanced options tucked away.</p>
+    </div>
+    <ul>
+      <li><a class="btn" href="clear/index.html">Start</a></li>
+      <li><a class="btn" href="clear/editor.html">Editor</a></li>
+      <li><a class="btn" href="clear/bulk.html">Bulk convert</a></li>
+    </ul>
+  </section>
+
+  <section class="cand" aria-labelledby="r2">
+    <div>
+      <h2 id="r2">Sprout</h2>
+      <p><strong>Soft and human.</strong> Sage-mint surfaces, forest-green ink and one peach button per view. Big rounded shapes and kind wording.</p>
+    </div>
+    <ul>
+      <li><a class="btn" href="sprout/index.html">Start</a></li>
+      <li><a class="btn" href="sprout/editor.html">Editor</a></li>
+      <li><a class="btn" href="sprout/bulk.html">Bulk convert</a></li>
+    </ul>
+  </section>
+
+  <section class="cand" aria-labelledby="r3">
+    <div>
+      <h2 id="r3">Sentence</h2>
+      <p><strong>Settings you read aloud.</strong> Choose options by editing a sentence: "Save my picture as WebP at Balanced quality." Large readable type, accessibility first.</p>
+    </div>
+    <ul>
+      <li><a class="btn" href="sentence/index.html">Start</a></li>
+      <li><a class="btn" href="sentence/editor.html">Editor</a></li>
+      <li><a class="btn" href="sentence/bulk.html">Bulk convert</a></li>
+    </ul>
+  </section>
+
+<h2 class="grp">Round 1: bolder (set aside as too loud)</h2>
+
+  <section class="cand" aria-labelledby="c1">
+    <div>
+      <h2 id="c1">Cobalt</h2>
+      <p><strong>Squeeze as typography.</strong> A drenched cobalt poster world where the type itself compresses as the image does. Acid lime is reserved for savings and the primary action.</p>
+    </div>
+    <ul>
+      <li><a class="btn" href="cobalt/index.html">Start</a></li>
+      <li><a class="btn" href="cobalt/editor.html">Editor</a></li>
+      <li><a class="btn" href="cobalt/bulk.html">Bulk convert</a></li>
+    </ul>
+  </section>
+
+  <section class="cand" aria-labelledby="c2">
+    <div>
+      <h2 id="c2">Light Table</h2>
+      <p><strong>The colour-critical desk.</strong> Neutral grey surround, paper mats, film-edge data print and a grease-pencil vermilion. A pixel loupe makes comparing encodes the main event.</p>
+    </div>
+    <ul>
+      <li><a class="btn" href="lighttable/index.html">Start</a></li>
+      <li><a class="btn" href="lighttable/editor.html">Editor</a></li>
+      <li><a class="btn" href="lighttable/bulk.html">Bulk convert</a></li>
+    </ul>
+  </section>
+
+  <section class="cand" aria-labelledby="c3">
+    <div>
+      <h2 id="c3">Departures</h2>
+      <p><strong>Under the weight limit.</strong> Signal-yellow wayfinding with black sign panels. File sizes flip on split-flap counters, and bulk convert reads as a departures board.</p>
+    </div>
+    <ul>
+      <li><a class="btn" href="departures/index.html">Start</a></li>
+      <li><a class="btn" href="departures/editor.html">Editor</a></li>
+      <li><a class="btn" href="departures/bulk.html">Bulk convert</a></li>
+    </ul>
+  </section>
+</main>
+</body>
+</html>

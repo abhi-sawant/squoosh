@@ -1,4 +1,38 @@
 html {
+  /* Sprout design tokens: soft sage ground, forest ink, one peach action. */
+  --bg: #eef6f0;
+  --surface: #fff;
+  --sage-50: #f5faf6;
+  --sage-100: #e3efe6;
+  --sage-200: #cfe3d5;
+  --sage-300: #a9cdb5;
+  --leaf: #8ccba6;
+  --green: #2e7d55;
+  --green-ink: #1c5a3a;
+  --ink: #1f3a2d;
+  --ink-soft: #4b6656;
+  --peach: #ff8f6b;
+  --peach-hover: #ff7d55;
+  --peach-tint: #ffe9df;
+  --peach-deep: #e8704a;
+  --butter: #fff3b8;
+  --err-bg: #ffe3da;
+  --err-ink: #8a2f14;
+  --focus: #2e7d55;
+  --line: var(--sage-200);
+  --r-lg: 28px;
+  --r-md: 20px;
+  --r-sm: 14px;
+  --shadow: 0 8px 24px rgba(31, 58, 45, 0.08), 0 1px 3px rgba(31, 58, 45, 0.06);
+  --shadow-sm: 0 3px 10px rgba(31, 58, 45, 0.1),
+    0 1px 2px rgba(31, 58, 45, 0.06);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --font-head: 'Lexend', system-ui, sans-serif;
+  --font-body: 'Figtree', system-ui, sans-serif;
+  accent-color: var(--green);
+  color-scheme: light;
+
+  /* Legacy names, kept until every component moves to the tokens above. */
   --pink: #ff3385;
   --hot-pink: #ff0066;
   --white: #fff;

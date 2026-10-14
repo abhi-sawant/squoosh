@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;500;600;700;800;900&family=Overpass+Mono:wght@500;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"><title>Squoosh editor</title><meta name="theme-color" content="#FFD400"></head>
+<body class="editor">
+<div class="page">
+  <header class="route on-black">
+    <a class="btn btn--white" href="index.html"><svg class="i"><use href="#i-arrow-left"/></svg>Back</a>
+    <ol class="line" id="line" aria-label="Route: original to result"></ol>
+    <div class="tools"><label class="ibtn" tabindex="0" id="add" title="Add another image" role="button" aria-label="Add another image"><svg class="i"><use href="#i-plus"/></svg><input class="sr" type="file" id="addfile" accept="image/*" tabindex="-1"></label></div>
+  </header>
+
+  <main>
+    <section class="stagewrap" aria-label="Image comparison">
+      <div class="tools-bar on-black">
+        <div class="zoom grp-t" role="group" aria-label="Zoom">
+          <button class="ibtn" id="zout" aria-label="Zoom out"><svg class="i"><use href="#i-minus"/></svg></button>
+          <label class="sr" for="zin">Zoom percentage</label>
+          <input type="text" id="zin" value="100%" inputmode="numeric" autocomplete="off">
+          <button class="ibtn" id="zplus" aria-label="Zoom in"><svg class="i"><use href="#i-plus"/></svg></button>
+        </div>
+        <div class="grp-t" role="group" aria-label="View">
+          <button class="ibtn" id="t-sbs" aria-pressed="false" aria-label="Side by side layout" title="Side by side"><svg class="i"><use href="#i-split"/></svg></button>
+          <button class="ibtn" id="t-pix" aria-pressed="false" aria-label="Pixelated rendering" title="Pixelated"><svg class="i"><use href="#i-pixel"/></svg></button>
+          <button class="ibtn" id="t-bg" aria-pressed="true" aria-label="Transparency checkerboard background" title="Checkerboard background"><svg class="i"><use href="#i-checker"/></svg></button>
+          <button class="ibtn" id="t-rot" aria-label="Rotate 90 degrees" title="Rotate 90°"><svg class="i"><use href="#i-rotate"/></svg></button>
+        </div>
+      </div>
+      <div class="stage" id="stage">
+        <div class="view" id="view">
+          <figure class="pane pane-a"><img id="img-a" alt="Left side preview"></figure>
+          <figure class="pane pane-b"><img id="img-b" alt="Right side preview"></figure>
+          <span class="lab lab-a" id="lab-a">Left</span><span class="lab lab-b" id="lab-b">Right</span>
+          <div class="handle" id="handle" role="slider" tabindex="0" aria-label="Comparison divider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="grip"><svg class="i"><use href="#i-lr"/></svg></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="console on-black" aria-label="Settings">
+      <div class="tabs" role="tablist" aria-label="Side">
+        <button role="tab" id="tab-a" aria-selected="false" data-tab="a">Left</button>
+        <button role="tab" id="tab-b" aria-selected="true" data-tab="b">Right</button>
+      </div>
+      <div class="cols">
+        <section class="side" data-side="a" aria-label="Left side"></section>
+        <section class="side" data-side="b" aria-label="Right side"></section>
+      </div>
+    </section>
+  </main>
+</div>
+<div class="dlbar on-black" id="dlbar"></div>
+<div class="snack" id="snack" role="status" aria-live="polite" hidden><span id="snack-t"></span></div>
+<script src="app.js"></script>
+</body></html>

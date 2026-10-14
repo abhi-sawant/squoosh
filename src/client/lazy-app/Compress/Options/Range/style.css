@@ -3,10 +3,13 @@
   z-index: 0;
   display: grid;
   grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 4px 12px;
 }
 
 .label-text {
-  color: #fff; /* TEMP */
+  font: 600 0.9375rem var(--font-head);
+  color: var(--ink);
 }
 
 .range-wc-container {
@@ -24,24 +27,32 @@
   grid-row: 1 / 2;
   grid-column: 2 / 3;
 
-  text-align: right;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  border: none;
-  padding: 2px 5px;
+  text-align: center;
+  font: 600 0.9375rem var(--font-body);
+  font-variant-numeric: tabular-nums;
+  color: var(--green-ink);
+  background: var(--sage-100);
+  border: 2px solid transparent;
+  border-radius: 999px;
+  padding: 0 8px;
   box-sizing: border-box;
-  text-decoration: underline;
-  text-decoration-style: dotted;
-  text-decoration-color: var(--main-theme-color);
-  text-underline-position: under;
-  width: 54px;
-  position: relative;
-  left: 5px;
+  width: 64px;
+  height: 32px;
+  transition: background-color 200ms var(--ease), border-color 200ms var(--ease);
+
+  &:hover {
+    border-color: var(--leaf);
+  }
 
   &:focus {
     background: #fff;
-    color: #000;
+    border-color: var(--green);
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
   }
 
   /* Remove the number controls */

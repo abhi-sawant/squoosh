@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Squoosh editor: photo.jpg</title>
+<meta name="theme-color" content="#2038ff">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,100..900&family=Schibsted+Grotesk:wght@400..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="editor">
+<script src="app.js"></script>
+
+<header class="top" id="top">
+  <a class="btn" href="index.html"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg>Back</a>
+  <h1 class="sq" id="wordmark" style="--w:150;--wg:900">Squoosh</h1>
+  <span class="grow file-meta" id="filemeta">photo.jpg · 1400×541 · 2.8 MB</span>
+</header>
+
+<div class="ed">
+  <section class="stage-col" aria-label="Image comparison">
+    <div class="toolbar" role="toolbar" aria-label="Viewer controls">
+      <button class="tool" type="button" id="t-layout" aria-pressed="false" title="Side by side" aria-label="Side-by-side layout"><svg class="ic" aria-hidden="true"><use href="#i-sbs"/></svg></button>
+      <div class="zoom" role="group" aria-label="Zoom">
+        <button type="button" id="z-out" aria-label="Zoom out"><svg class="ic" aria-hidden="true"><use href="#i-minus"/></svg></button>
+        <input type="text" id="z-val" value="100%" inputmode="numeric" aria-label="Zoom percentage">
+        <button type="button" id="z-in" aria-label="Zoom in"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg></button>
+      </div>
+      <span class="sep hide-m"></span>
+      <button class="tool" type="button" id="t-pixel" aria-pressed="false" title="Pixelated rendering" aria-label="Toggle pixelated rendering"><svg class="ic" aria-hidden="true"><use href="#i-pixel"/></svg></button>
+      <button class="tool" type="button" id="t-bg" aria-pressed="false" title="Transparency checkerboard" aria-label="Toggle checkerboard background"><svg class="ic" aria-hidden="true"><use href="#i-checker"/></svg></button>
+      <button class="tool" type="button" id="t-rot" title="Rotate 90 degrees" aria-label="Rotate 90 degrees"><svg class="ic" aria-hidden="true"><use href="#i-rotate"/></svg></button>
+      <span class="grow" style="flex:1"></span>
+      <button class="btn" type="button" id="t-add"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg>Add image</button>
+    </div>
+
+    <div class="compare" id="cmp" data-orient="h">
+      <div class="layer base"><img id="img-l" src="../assets/photo.jpg" alt="Original photo.jpg"></div>
+      <div class="layer top"><img id="img-r" src="../assets/photo.jpg" alt="Compressed result of photo.jpg"></div>
+      <span class="tag l" id="tag-l">Original Image</span>
+      <span class="tag r" id="tag-r">MozJPEG</span>
+      <button class="handle" type="button" role="slider" aria-label="Comparison divider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="knob"><svg class="ic" aria-hidden="true"><use href="#i-sbs-arrows"/></svg></span></button>
+    </div>
+
+    <div class="tickets" aria-label="Results">
+      <div class="ticket" id="tk-left" data-side="left">
+        <div class="lab"><svg class="ic spin" aria-hidden="true"><use href="#i-spinner"/></svg><span class="tl">Left: Original Image</span></div>
+        <div class="row"><div class="sq fig" style="--w:150;--wg:800"><span class="n">2.8</span><small>MB</small></div><span class="pct none">Original</span></div>
+        <div class="dl"><button class="btn" type="button" data-dl="left"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg>Download</button></div>
+      </div>
+      <div class="ticket" id="tk-right" data-side="right">
+        <div class="lab"><svg class="ic spin" aria-hidden="true"><use href="#i-spinner"/></svg><span class="tl">Right: MozJPEG</span></div>
+        <div class="row"><div class="sq fig" style="--w:78;--wg:800"><span class="n">214</span><small>kB</small></div><span class="pct">92% smaller</span></div>
+      </div>
+      <div class="dlbar"><button class="bar bar-lime" type="button" data-dl="right" id="dl-right"><span>Download</span><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg></button></div>
+    </div>
+  </section>
+
+  <aside class="rail" aria-label="Compression options">
+    <div class="tabs" role="tablist" aria-label="Side">
+      <button class="tab" role="tab" id="tab-left" aria-controls="panel-left" aria-selected="false" type="button">Left</button>
+      <button class="tab" role="tab" id="tab-right" aria-controls="panel-right" aria-selected="true" type="button">Right</button>
+    </div>
+    <div class="utils">
+      <span class="grow" id="side-name">Right side</span>
+      <button class="tool" type="button" id="u-copy" title="Copy settings to the other side" aria-label="Copy settings to the other side"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg></button>
+      <button class="tool" type="button" id="u-save" title="Save side settings" aria-label="Save side settings"><svg class="ic" aria-hidden="true"><use href="#i-save"/></svg></button>
+      <button class="tool" type="button" id="u-import" title="Import saved side settings" aria-label="Import saved side settings"><svg class="ic" aria-hidden="true"><use href="#i-upload"/></svg></button>
+    </div>
+    <div id="panels">
+      <div class="panel" role="tabpanel" id="panel-left" aria-labelledby="tab-left" data-side="left" hidden></div>
+      <div class="panel" role="tabpanel" id="panel-right" aria-labelledby="tab-right" data-side="right"></div>
+    </div>
+  </aside>
+</div>
+
+<template id="side-tpl">
+  <section class="slab" data-slab="enc">
+    <div class="slab-h"><h3>Encoder</h3></div>
+    <div class="slab-b">
+      <div class="field"><label class="lbl" for="__enc">Format</label>
+        <select id="__enc" data-k="enc">
+          <option value="original">Original Image</option>
+          <option value="mozjpeg">MozJPEG</option>
+          <option value="webp">WebP</option>
+          <option value="avif">AVIF</option>
+          <option value="jxl">JPEG XL (beta)</option>
+          <option value="webp2">WebP v2 (unstable)</option>
+          <option value="oxipng">OxiPNG</option>
+          <option value="qoi">QOI</option>
+          <option value="bpng">Browser PNG</option>
+          <option value="bjpeg">Browser JPEG</option>
+          <option value="bgif">Browser GIF</option>
+        </select>
+      </div>
+    </div>
+  </section>
+  <section class="slab" data-slab="resize" data-edit>
+    <div class="slab-h"><h3>Resize</h3><input type="checkbox" data-k="resize" aria-label="Enable resize"></div>
+    <div class="slab-b" hidden>
+      <div class="field"><label class="lbl" for="__preset">Preset</label>
+        <select id="__preset" data-k="preset"><option value="">Custom</option><option value="25">25%</option><option value="50">50%</option><option value="75">75%</option><option value="100">100%</option></select></div>
+      <div class="two">
+        <div class="field"><label class="lbl" for="__w">Width</label><input id="__w" type="number" min="1" max="8000" value="1400" data-k="w"></div>
+        <div class="field"><label class="lbl" for="__h">Height</label><input id="__h" type="number" min="1" max="8000" value="541" data-k="h"></div>
+      </div>
+      <div class="field"><label class="lbl" for="__method">Method</label>
+        <select id="__method" data-k="method"><option>Lanczos3</option><option>Mitchell</option><option>Catmull-Rom</option><option>Triangle</option><option>hqx</option><option>Browser pixelated</option><option>Browser low quality</option><option>Browser high quality</option></select></div>
+      <div class="field"><label class="lbl" for="__fit">Fit method</label>
+        <select id="__fit" data-k="fit"><option>Stretch</option><option>Contain</option></select></div>
+      <label class="chk">Premultiply alpha <input type="checkbox" data-k="premul" checked></label>
+      <label class="chk">Linear RGB <input type="checkbox" data-k="linear" checked></label>
+    </div>
+  </section>
+  <section class="slab" data-slab="palette" data-edit>
+    <div class="slab-h"><h3>Reduce palette</h3><input type="checkbox" data-k="palette" aria-label="Enable palette reduction"></div>
+    <div class="slab-b" hidden>
+      <div class="field"><label class="lbl" for="__colors">Colors <span class="val" data-out="colors">256</span></label><input id="__colors" type="range" min="2" max="256" value="256" data-k="colors"></div>
+      <div class="field"><label class="lbl" for="__dither">Dithering <span class="val" data-out="dither">100%</span></label><input id="__dither" type="range" min="0" max="100" value="100" data-k="dither"></div>
+    </div>
+  </section>
+  <section class="slab" data-slab="compress" data-edit>
+    <div class="slab-h"><h3>Compress</h3></div>
+    <div class="slab-b">
+      <div class="field" data-lossy><label class="lbl" for="__q">Quality <span class="val" data-out="q">75</span></label><input id="__q" type="range" min="0" max="100" value="75" data-k="q"></div>
+      <p class="note" data-lossless hidden>This format is lossless. It has no quality setting, so the size changes only with resize and palette.</p>
+      <label class="chk" data-moz>Advanced settings <input type="checkbox" data-k="adv"></label>
+      <div class="adv" data-adv hidden>
+        <div class="field"><label class="lbl" for="__ch">Channels</label><select id="__ch" data-k="channels"><option>YCbCr</option><option>Grayscale</option><option>RGB</option></select></div>
+        <label class="chk">Separate chroma quality <input type="checkbox" data-k="sepchroma"></label>
+        <div class="field"><label class="lbl" for="__cs">Chroma subsample <span class="val" data-out="cs">2</span></label><input id="__cs" type="range" min="1" max="4" value="2" data-k="cs"></div>
+        <label class="chk">Progressive rendering <input type="checkbox" data-k="prog" checked></label>
+        <label class="chk">Optimize Huffman table <input type="checkbox" data-k="huff" checked></label>
+        <label class="chk">Trellis multipass <input type="checkbox" data-k="trellis"></label>
+        <div class="field"><label class="lbl" for="__sm">Smoothing <span class="val" data-out="sm">0</span></label><input id="__sm" type="range" min="0" max="100" value="0" data-k="sm"></div>
+      </div>
+    </div>
+  </section>
+</template>
+
+<div class="snackbar" id="snackbar" role="status" aria-live="polite"></div>
+</body>
+</html>

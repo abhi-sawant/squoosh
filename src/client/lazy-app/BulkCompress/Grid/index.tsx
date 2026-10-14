@@ -2,7 +2,6 @@ import { h, Component, Fragment } from 'preact';
 
 import * as style from './style.css';
 import 'add-css:./style.css';
-import 'shared/custom-els/loading-spinner';
 import { BulkItem } from '..';
 import prettyBytes from '../../Compress/Results/pretty-bytes';
 
@@ -61,7 +60,7 @@ class Thumbnail extends Component<ThumbProps, ThumbState> {
         )}
         {item.status === 'processing' && (
           <div class={style.thumbOverlay}>
-            <loading-spinner />
+            <span class={style.spin} aria-hidden="true" />
           </div>
         )}
       </div>
@@ -69,24 +68,48 @@ class Thumbnail extends Component<ThumbProps, ThumbState> {
   }
 }
 
-function StatusBadge({ item }: { item: BulkItem }) {
+const checkIcon = (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M5 12.5l4.5 4.5L19 7.5" />
+  </svg>
+);
+
+const alertIcon = (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M12 7v6M12 17h.01" />
+  </svg>
+);
+
+function StatusChip({ item }: { item: BulkItem }) {
   switch (item.status) {
     case 'pending':
-      return (
-        <span class={`${style.badge} ${style.badgePending}`}>Pending</span>
-      );
+      return <span class={style.chip}>Waiting</span>;
     case 'processing':
       return (
-        <span class={`${style.badge} ${style.badgeProcessing}`}>
-          Converting…
+        <span class={`${style.chip} ${style.chipBusy}`}>
+          <span class={style.spin} aria-hidden="true" />
+          Converting
         </span>
       );
-    case 'done':
-      return <span class={`${style.badge} ${style.badgeDone}`}>✓ Done</span>;
+    case 'done': {
+      const percent =
+        item.resultSize !== undefined
+          ? Math.round((1 - item.resultSize / item.file.size) * 100)
+          : 0;
+      return (
+        <span class={`${style.chip} ${style.chipDone}`}>
+          {checkIcon}
+          {percent >= 0
+            ? `Done, saved ${percent}%`
+            : `Done, ${Math.abs(percent)}% bigger`}
+        </span>
+      );
+    }
     case 'error':
       return (
-        <span class={`${style.badge} ${style.badgeError}`} title={item.error}>
-          ✕ Failed
+        <span class={`${style.chip} ${style.chipError}`}>
+          {alertIcon}
+          Couldn't convert
         </span>
       );
   }
@@ -99,15 +122,12 @@ export default class Grid extends Component<GridProps> {
         {items.map((item, index) => {
           let sizeLine;
           if (item.status === 'done' && item.resultSize !== undefined) {
-            const ratio = item.resultSize / item.file.size;
-            const percent = Math.round((1 - ratio) * 100);
             sizeLine = (
               <Fragment>
-                {formatBytes(item.file.size)} → {formatBytes(item.resultSize)}{' '}
-                <span class={percent >= 0 ? style.savingDown : style.savingUp}>
-                  ({percent >= 0 ? '↓' : '↑'}
-                  {Math.abs(percent)}%)
-                </span>
+                {formatBytes(item.file.size)} to{' '}
+                <strong class={style.newSize}>
+                  {formatBytes(item.resultSize)}
+                </strong>
               </Fragment>
             );
           } else {
@@ -115,11 +135,12 @@ export default class Grid extends Component<GridProps> {
           }
 
           return (
-            <li class={style.card} key={index}>
+            <li class={style.card} key={index} data-status={item.status}>
               <button
                 class={style.cardButton}
                 onClick={() => onItemClick(index)}
                 title="Open comparison"
+                type="button"
               >
                 <Thumbnail item={item} onClick={() => onItemClick(index)} />
                 <div class={style.cardInfo}>
@@ -127,7 +148,12 @@ export default class Grid extends Component<GridProps> {
                     {item.file.name}
                   </div>
                   <div class={style.cardSize}>{sizeLine}</div>
-                  <StatusBadge item={item} />
+                  <StatusChip item={item} />
+                  {item.status === 'error' && item.error && (
+                    <div class={style.why}>
+                      {item.error.replace(/^\w*Error: /, '')}
+                    </div>
+                  )}
                 </div>
               </button>
             </li>

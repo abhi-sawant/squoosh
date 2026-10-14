@@ -37,7 +37,7 @@ export function qualityOption(
     render({ options }: Props) {
       return (
         <div class={style.optionsSection}>
-          <div class={style.optionOneCell}>
+          <div class={`${style.optionOneCell} ${style.qualityRow}`}>
             <Range
               name="quality"
               min={min}

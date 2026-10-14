@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Squoosh editor</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#3b3d41">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Hanken+Grotesk:wght@400;500;600;700&family=Martian+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="editor" data-page="editor" data-seg="1">
+<header class="toolbar" aria-label="Editor toolbar">
+  <a class="btn back" href="index.html" aria-label="Back to start"><i class="ico" data-i="back"></i><span class="lbl">Back</span></a>
+  <span class="tb-sep" aria-hidden="true"></span>
+  <div class="tb-group" role="group" aria-label="Zoom">
+    <button class="btn icon" type="button" id="zoomOut" aria-label="Zoom out"><i class="ico" data-i="minus"></i></button>
+    <input class="zoom-in" id="zoom" type="text" inputmode="numeric" value="100%" aria-label="Zoom percentage" autocomplete="off">
+    <button class="btn icon" type="button" id="zoomIn" aria-label="Zoom in"><i class="ico" data-i="plus"></i></button>
+  </div>
+  <button class="btn icon" type="button" id="tgSmooth" aria-pressed="false" aria-label="Show pixels (pixelated rendering)" title="Show pixels (pixelated rendering)"><i class="ico" data-i="pixels"></i></button>
+  <button class="btn icon" type="button" id="tgBg" aria-pressed="false" aria-label="Neutral grey background instead of checkerboard" title="Neutral grey background instead of checkerboard"><i class="ico" data-i="checker"></i></button>
+  <button class="btn icon" type="button" id="rotate" aria-label="Rotate 90 degrees" title="Rotate 90 degrees"><i class="ico" data-i="rotate"></i></button>
+  <button class="btn icon tb-hide-sm" type="button" id="tgLayout" aria-pressed="false" aria-label="Side by side layout" title="Side by side layout"><i class="ico" data-i="sbs"></i></button>
+  <button class="btn icon tb-hide-sm" type="button" id="tgLoupe" aria-pressed="true" aria-label="Loupe (4x pixel peek)" title="Loupe (4x pixel peek)"><i class="ico" data-i="loupe"></i></button>
+  <span class="spacer"></span>
+  <button class="btn" type="button" id="add" aria-label="Add another image"><i class="ico" data-i="plus"></i><span class="lbl">Add image</span></button>
+  <input type="file" id="file" accept="image/*" multiple hidden>
+</header>
+
+<div class="workbench">
+  <aside class="opts opts-l" id="optL" data-side="0" aria-label="Left side options"></aside>
+  <main class="stage" id="stage">
+    <div class="sheet" id="sheet" data-cmp-scope>
+      <div class="cmp-host" id="cmp"></div>
+      <div class="sheet-meta"><p class="print" id="printL"></p><p class="print r" id="printR"></p></div>
+      <div class="sheet-cap"><div class="cap" id="capL"></div><div class="cap r" id="capR"></div></div>
+    </div>
+  </main>
+  <aside class="opts opts-r" id="optR" data-side="1" aria-label="Right side options"></aside>
+</div>
+
+<nav class="segbar" aria-label="Choose which side to edit">
+  <div class="seg" role="tablist">
+    <button type="button" role="tab" id="segL" data-seg="0" aria-selected="false">Left: Original</button>
+    <button type="button" role="tab" id="segR" data-seg="1" aria-selected="true">Right: MozJPEG</button>
+  </div>
+</nav>
+<div class="snackbar" id="snackbar" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+</body>
+</html>

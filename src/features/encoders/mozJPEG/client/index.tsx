@@ -12,7 +12,6 @@ import Range from 'client/lazy-app/Compress/Options/Range';
 import Checkbox from 'client/lazy-app/Compress/Options/Checkbox';
 import Expander from 'client/lazy-app/Compress/Options/Expander';
 import Select from 'client/lazy-app/Compress/Options/Select';
-import Revealer from 'client/lazy-app/Compress/Options/Revealer';
 
 export function encode(
   signal: AbortSignal,
@@ -34,7 +33,7 @@ interface State {
 
 export class Options extends Component<Props, State> {
   state: State = {
-    showAdvanced: false,
+    showAdvanced: true,
   };
 
   onChange = (event: Event) => {
@@ -106,7 +105,7 @@ export class Options extends Component<Props, State> {
     // gathering the data.
     return (
       <form class={style.optionsSection} onSubmit={preventDefault}>
-        <div class={style.optionOneCell}>
+        <div class={`${style.optionOneCell} ${style.qualityRow}`}>
           <Range
             name="quality"
             min="0"
@@ -117,13 +116,6 @@ export class Options extends Component<Props, State> {
             Quality:
           </Range>
         </div>
-        <label class={style.optionReveal}>
-          <Revealer
-            checked={showAdvanced}
-            onChange={linkState(this, 'showAdvanced')}
-          />
-          Advanced settings
-        </label>
         <Expander>
           {showAdvanced ? (
             <div>

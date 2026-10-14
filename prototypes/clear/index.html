@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Squoosh: make images smaller</title>
+<meta name="description" content="Make images smaller without losing quality. Everything happens on your device.">
+<meta name="theme-color" content="#F6F8FB">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="index">
+
+<header class="topbar">
+  <a class="brand" href="index.html" aria-label="Squoosh home">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="10" fill="#2762EA"/><path d="M9 12.5l5 3.5-5 3.5M23 12.5l-5 3.5 5 3.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Squoosh
+  </a>
+  <nav class="spine" aria-label="Steps">
+    <ol>
+      <li class="is-current" aria-current="step"><span class="dot"><span class="num">1</span><svg class="ic tick"><use href="#i-check"/></svg></span>Choose</li>
+      <li><span class="dot"><span class="num">2</span><svg class="ic tick"><use href="#i-check"/></svg></span>Adjust</li>
+      <li><span class="dot"><span class="num">3</span><svg class="ic tick"><use href="#i-check"/></svg></span>Save</li>
+    </ol>
+  </nav>
+  <div class="topbar-actions">
+    <button class="btn btn-secondary btn-sm" id="install" type="button" hidden><svg class="ic ic-sm"><use href="#i-install"/></svg>Install app</button>
+  </div>
+</header>
+
+<main>
+  <div class="intro">
+    <h1>Make images smaller without losing quality</h1>
+    <p class="lead">Pick a photo, see the difference, and save a lighter copy in seconds.</p>
+
+    <section class="drop" id="drop" aria-label="Choose images">
+      <input type="file" id="file" accept="image/*,.heic,.heif,.tif,.tiff" multiple hidden>
+      <div class="drop-idle">
+        <span class="drop-badge"><svg class="ic"><use href="#i-upload"/></svg></span>
+        <p class="drop-title">Drag an image here to begin</p>
+        <p class="small">JPEG, PNG, WebP, AVIF and more. Choose several to convert them together.</p>
+        <div class="drop-actions">
+          <button class="btn btn-primary btn-lg" id="browse" type="button">Browse for images</button>
+          <button class="btn btn-secondary btn-lg" id="paste" type="button" hidden><svg class="ic"><use href="#i-clipboard"/></svg>Paste</button>
+        </div>
+        <p class="drop-note"><svg class="ic"><use href="#i-lock"/></svg>Stays on your device. Nothing is uploaded.</p>
+      </div>
+      <div class="drop-over" aria-hidden="true">
+        <span class="drop-badge"><svg class="ic"><use href="#i-upload"/></svg></span>
+        Drop to start
+      </div>
+    </section>
+
+    <p class="demos-title" id="demos-label">Or try one of these:</p>
+    <ul class="demos" aria-labelledby="demos-label">
+      <li><a class="demo" href="editor.html?demo=photo" data-demo="photo">
+        <span class="demo-thumb"><img src="../assets/photo.jpg" alt="Landscape photo preview" loading="lazy"></span>
+        <span class="demo-name">Large photo</span><span class="demo-size">2.8 MB</span></a></li>
+      <li><a class="demo" href="editor.html?demo=art" data-demo="art">
+        <span class="demo-thumb"><img src="../assets/artwork.jpg" alt="Artwork preview" loading="lazy"></span>
+        <span class="demo-name">Artwork</span><span class="demo-size">2.9 MB</span></a></li>
+      <li><a class="demo" href="editor.html?demo=pixel3" data-demo="pixel3">
+        <span class="demo-thumb"><img src="../assets/screen.jpg" alt="Phone screenshot preview" loading="lazy"></span>
+        <span class="demo-name">Device screen</span><span class="demo-size">1.6 MB</span></a></li>
+      <li><a class="demo" href="editor.html?demo=icon" data-demo="icon">
+        <span class="demo-thumb"><svg viewBox="0 0 64 64" aria-label="Squoosh icon preview" role="img"><rect x="4" y="4" width="56" height="56" rx="16" fill="#2762EA"/><path d="M20 26l9 6-9 6M44 26l-9 6 9 6" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="demo-name">SVG icon</span><span class="demo-size">13 KB</span></a></li>
+    </ul>
+  </div>
+
+  <div class="story">
+    <section class="story-row">
+      <div class="story-text">
+        <h2>Small</h2>
+        <p>Smaller images mean faster load times. Squoosh can reduce file size and maintain high quality.</p>
+      </div>
+      <figure class="story-art">
+        <svg viewBox="0 0 200 150" fill="none" stroke="#2762EA" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="A large picture shrinking into a small one">
+          <rect x="10" y="22" width="92" height="74" rx="10" fill="#fff"/>
+          <path d="M10 82l24-22 20 18 16-12 32 22"/>
+          <circle cx="36" cy="44" r="7" fill="#EAF0FF"/>
+          <path d="M112 59h22m0 0l-8-8m8 8l-8 8"/>
+          <rect x="146" y="46" width="44" height="36" rx="7" fill="#EAF0FF"/>
+          <path d="M146 74l12-10 10 8 8-6 14 10"/>
+          <path d="M30 120h140" stroke="#C6D6FA"/><path d="M30 120h42" />
+        </svg>
+      </figure>
+    </section>
+    <section class="story-row">
+      <div class="story-text">
+        <h2>Simple</h2>
+        <p>Open your image, inspect the differences, then save instantly. Feeling adventurous? Adjust the settings for even smaller files.</p>
+      </div>
+      <figure class="story-art">
+        <svg viewBox="0 0 200 150" fill="none" stroke="#2762EA" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="A picture with a slider comparing before and after">
+          <rect x="16" y="20" width="168" height="96" rx="12" fill="#fff"/>
+          <path d="M100 20v96"/>
+          <path d="M16 96l36-32 28 24 20-14" />
+          <path d="M100 82l24-20 22 18 38-22" stroke-dasharray="1 8"/>
+          <circle cx="100" cy="68" r="13" fill="#fff"/>
+          <path d="M96 68l-3 0m14 0l-3 0M95 64l-4 4 4 4M105 64l4 4-4 4" stroke-width="2.2"/>
+          <path d="M56 134h88" stroke="#C6D6FA"/><circle cx="100" cy="134" r="5" fill="#2762EA"/>
+        </svg>
+      </figure>
+    </section>
+    <section class="story-row">
+      <div class="story-text">
+        <h2>Secure</h2>
+        <p>Worried about privacy? Images never leave your device since Squoosh does all the work locally.</p>
+      </div>
+      <figure class="story-art">
+        <svg viewBox="0 0 200 150" fill="none" stroke="#2762EA" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="A laptop with a padlock on its screen">
+          <rect x="34" y="20" width="132" height="86" rx="10" fill="#fff"/>
+          <path d="M18 122h164"/>
+          <path d="M18 122a8 8 0 008 8h148a8 8 0 008-8"/>
+          <rect x="82" y="58" width="36" height="28" rx="7" fill="#EAF0FF"/>
+          <path d="M89 58v-7a11 11 0 0122 0v7"/>
+          <path d="M100 68v8" />
+        </svg>
+      </figure>
+    </section>
+  </div>
+</main>
+
+<footer class="foot">
+  <a href="#privacy">Privacy</a>
+  <a href="https://github.com/GoogleChromeLabs/squoosh" target="_blank" rel="noopener"><svg class="ic ic-sm"><use href="#i-github"/></svg>Source on Github</a>
+  <span>A <a href="https://github.com/GoogleChromeLabs/squoosh" target="_blank" rel="noopener">fork of Squoosh</a></span>
+</footer>
+
+<div class="snackbar" id="snackbar" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+</body>
+</html>

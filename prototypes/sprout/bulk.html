@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Squoosh: convert many pictures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Lexend:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="app.js" defer></script>
+</head>
+<body data-page="bulk">
+<a class="skip" href="#main">Skip to main content</a>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="index.html" aria-label="Squoosh home">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><rect x="2" y="2" width="36" height="36" rx="12" class="fs" style="stroke:var(--sage-300);stroke-width:2"/><path d="M10 29C10 17 16 11 29 11c0 13-6 18-19 18Z" class="st fm" style="stroke-width:2.2"/><path d="M12 27c4-6 8-10 13-12" class="st" style="stroke-width:2.2"/></svg>
+      <span>Squoosh</span>
+    </a>
+  </header>
+
+  <main id="main">
+    <div class="bar">
+      <a class="btn secondary small" href="index.html">
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+        Back
+      </a>
+    </div>
+    <div class="bulk-head">
+      <h1>Bulk convert</h1>
+      <p id="sub">12 images &middot; 7 converted</p>
+    </div>
+
+    <div class="bulk-grid">
+      <section class="bulk-main" aria-label="Your pictures">
+        <div class="progress">
+          <div class="row"><p class="main" id="progText" aria-live="polite">7 of 12 converted</p><p class="saved" id="savedText">You've saved 18.4 MB so far</p></div>
+          <div class="track" role="progressbar" aria-label="Conversion progress" aria-valuemin="0" aria-valuemax="12" aria-valuenow="7" id="track"><div id="progFill"></div></div>
+        </div>
+        <ul class="tiles" id="tiles"></ul>
+      </section>
+
+      <aside class="panel" aria-label="Settings for all pictures">
+        <h2>How should we save them?</h2>
+        <fieldset class="seg" aria-label="Choose how small to make them">
+          <legend class="sr">Choose how small to make them</legend>
+          <label class="seg-item"><input type="radio" name="preset" value="40"><span class="seg-face"><strong>Smallest</strong><small>Tiny files</small></span></label>
+          <label class="seg-item"><input type="radio" name="preset" value="75" checked><span class="seg-face"><strong>Balanced</strong><small>Best for most</small></span></label>
+          <label class="seg-item"><input type="radio" name="preset" value="92"><span class="seg-face"><strong>Best quality</strong><small>Sharpest</small></span></label>
+        </fieldset>
+        <p class="custom-note" id="customNote" aria-live="polite"></p>
+
+        <div>
+          <label class="field"><span>Save as</span>
+            <select id="format"><option value="mozjpeg">JPEG</option><option value="webp">WebP</option><option value="avif">AVIF</option><option value="oxipng">PNG</option></select>
+          </label>
+          <p class="hint" id="fmtHint" style="margin-top:8px"></p>
+        </div>
+
+        <label class="field"><span>Shrink to <output id="scaleOut">50%</output></span>
+          <input type="range" id="scale" min="1" max="100" value="50">
+          <span class="hint">Each picture is scaled to this percentage of its original size.</span>
+        </label>
+
+        <details class="more">
+          <summary>More settings <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>
+          <div class="more-body">
+            <label class="field"><span>Encoder</span><select id="enc"></select></label>
+            <label class="field"><span>Quality <output id="qOut">75</output></span><input type="range" id="quality" min="1" max="100" value="75"></label>
+            <div class="opt">
+              <label class="switch"><span>Reduce palette</span><input type="checkbox" role="switch" id="paletteOn"></label>
+              <div class="opt-body"><label class="field"><span>Colors <output id="colorsOut">64</output></span><input type="range" id="colors" min="2" max="256" value="64"></label></div>
+            </div>
+            <label class="field"><span>Chroma subsample</span><select><option>4:2:0</option><option>4:2:2</option><option>4:4:4</option></select></label>
+            <label class="check"><input type="checkbox" checked> Progressive rendering</label>
+          </div>
+        </details>
+
+        <div style="display:grid;gap:12px">
+          <button class="btn primary big" id="convertAll" type="button">Convert all</button>
+          <button class="btn secondary" id="zip" type="button">
+            <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+            Download all as ZIP
+          </button>
+          <p class="stays"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Stays on your device</p>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<dialog id="cmp" aria-labelledby="cmpTitle">
+  <div class="dlg">
+    <header>
+      <h2 id="cmpTitle">Picture</h2>
+      <button class="icon-btn" id="cmpClose" type="button" aria-label="Close comparison" style="background:var(--sage-100)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </header>
+    <div class="stage" id="cmpStage" data-bg="checker" data-smooth="on">
+      <div class="layer before"><div class="view"><img id="cmpBefore" src="../assets/photo.jpg" alt="Original picture"></div></div>
+      <div class="layer after"><div class="view"><img id="cmpAfter" src="../assets/photo.jpg" alt="Converted picture"></div></div>
+      <div class="handle" role="slider" tabindex="0" aria-label="Compare before and after" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="Showing 50% before"><span class="pill">Before<i></i>After</span></div>
+    </div>
+    <p class="dlg-meta tnum" id="cmpMeta"></p>
+    <label class="field"><span>Quality <output id="cmpQOut">75</output></span><input type="range" id="cmpQ" min="1" max="100" value="75"></label>
+    <div class="btn-row" style="justify-content:flex-end"><button class="btn primary" id="cmpDone" type="button">Looks good</button></div>
+  </div>
+</dialog>
+<div class="snackbar" id="snack" role="status" aria-live="polite"></div>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adjust and save: Squoosh</title>
+<meta name="theme-color" content="#F6F8FB">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="editor">
+
+<header class="topbar">
+  <a class="brand" href="index.html" aria-label="Squoosh home">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="10" fill="#2762EA"/><path d="M9 12.5l5 3.5-5 3.5M23 12.5l-5 3.5 5 3.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Squoosh
+  </a>
+  <nav class="spine" aria-label="Steps" id="spine">
+    <ol>
+      <li class="is-done"><span class="dot"><span class="num">1</span><svg class="ic tick"><use href="#i-check"/></svg></span>Choose</li>
+      <li class="is-current" aria-current="step"><span class="dot"><span class="num">2</span><svg class="ic tick"><use href="#i-check"/></svg></span>Adjust</li>
+      <li><span class="dot"><span class="num">3</span><svg class="ic tick"><use href="#i-check"/></svg></span>Save</li>
+    </ol>
+  </nav>
+  <div class="topbar-actions"></div>
+</header>
+
+<main class="workspace">
+  <section class="stage" aria-label="Image preview">
+    <div class="stage-bar">
+      <a class="btn btn-ghost btn-sm" href="index.html"><svg class="ic ic-sm"><use href="#i-back"/></svg>Back</a>
+      <div class="file-info"><span class="file-name" id="fileName">photo.jpg</span><span class="file-meta" id="fileMeta">1400 × 541 · 2.8 MB</span></div>
+      <span class="spacer"></span>
+      <a class="btn btn-secondary btn-sm" href="index.html"><svg class="ic ic-sm"><use href="#i-plus"/></svg>Add another image</a>
+    </div>
+
+    <div class="compare" id="compare" data-mode="slider" data-bg="checker" data-smooth="on">
+      <div class="viewport" id="viewport">
+        <div class="canvas" id="canvas">
+          <div class="layer base"><img id="imgLeft" src="../assets/photo.jpg" alt="Original image"><span class="tag" id="tagLeft">Original</span></div>
+          <div class="layer top"><img id="imgRight" src="../assets/photo.jpg" alt="Compressed image"><span class="tag" id="tagRight">WebP</span></div>
+          <button class="divider" id="divider" type="button" role="slider" aria-label="Compare original and compressed" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="Showing half original, half compressed">
+            <span class="grip"><svg class="ic ic-sm"><use href="#i-grip"/></svg></span>
+          </button>
+        </div>
+      </div>
+      <div class="busy" id="busy" hidden><svg class="ic ic-sm spin"><use href="#i-spinner"/></svg>Updating preview</div>
+    </div>
+
+    <div class="stage-tools" role="toolbar" aria-label="Preview tools">
+      <div class="zoom">
+        <button class="icon-btn" id="zoomOut" type="button" aria-label="Zoom out"><svg class="ic"><use href="#i-minus"/></svg></button>
+        <label class="sr-only" for="zoomInput">Zoom percentage</label>
+        <span class="input-unit"><input class="input" id="zoomInput" type="number" min="5" max="800" value="100" inputmode="numeric"><span class="unit">%</span></span>
+        <button class="icon-btn" id="zoomIn" type="button" aria-label="Zoom in"><svg class="ic"><use href="#i-plus"/></svg></button>
+      </div>
+      <span class="tool-sep"></span>
+      <button class="icon-btn" id="rotate" type="button" aria-label="Rotate 90 degrees" title="Rotate 90 degrees"><svg class="ic"><use href="#i-rotate"/></svg></button>
+      <button class="icon-btn" id="smooth" type="button" aria-pressed="true" aria-label="Smooth pixels when zoomed" title="Smooth pixels when zoomed"><svg class="ic"><use href="#i-pixel"/></svg></button>
+      <button class="icon-btn" id="bgToggle" type="button" aria-label="Switch background: transparency grid or plain" title="Switch background"><svg class="ic"><use href="#i-checker"/></svg></button>
+      <span class="spacer"></span>
+      <div class="viewmode" role="group" aria-label="Comparison layout">
+        <button type="button" id="modeSlider" aria-pressed="true" aria-label="Slider comparison" title="Slider comparison"><svg class="ic"><use href="#i-split"/></svg></button>
+        <button type="button" id="modeSide" aria-pressed="false" aria-label="Side by side" title="Side by side"><svg class="ic"><use href="#i-columns"/></svg></button>
+      </div>
+    </div>
+  </section>
+
+  <aside class="panel" aria-label="Settings">
+    <div class="panel-scroll">
+
+      <section class="sec" aria-labelledby="h-format">
+        <h2 id="h-format">Save as</h2>
+        <div class="chips" role="radiogroup" aria-labelledby="h-format" id="formatChips">
+          <button class="chip" type="button" role="radio" aria-checked="true" data-enc="webp"><strong>Smaller</strong><span>WebP</span><svg class="ic"><use href="#i-check"/></svg></button>
+          <button class="chip" type="button" role="radio" aria-checked="false" data-enc="mozjpeg"><strong>Compatible</strong><span>JPEG</span><svg class="ic"><use href="#i-check"/></svg></button>
+          <button class="chip" type="button" role="radio" aria-checked="false" data-enc="oxipng"><strong>Lossless</strong><span>PNG</span><svg class="ic"><use href="#i-check"/></svg></button>
+          <button class="chip" type="button" role="radio" aria-checked="false" data-enc="more" id="moreChip"><strong>More formats</strong><span>AVIF, JPEG XL, QOI</span><svg class="ic"><use href="#i-check"/></svg></button>
+        </div>
+        <div class="more-formats field" id="moreFormats" hidden>
+          <label for="moreSelect">Other format</label>
+          <select class="input" id="moreSelect" data-bind="right.encoder">
+            <option value="avif">AVIF</option><option value="jxl">JPEG XL (beta)</option><option value="webp2">WebP v2 (unstable)</option>
+            <option value="qoi">QOI</option><option value="browserpng">Browser PNG</option><option value="browserjpeg">Browser JPEG</option><option value="browsergif">Browser GIF</option>
+          </select>
+        </div>
+        <p class="hint" id="formatHint" aria-live="polite">WebP: small files, works in all modern browsers.</p>
+      </section>
+
+      <section class="sec" aria-labelledby="h-quality">
+        <h2 id="h-quality">How much to shrink?</h2>
+        <div class="seg" role="radiogroup" aria-labelledby="h-quality" id="presets">
+          <button type="button" role="radio" aria-checked="false" data-preset="smallest">Smallest file</button>
+          <button type="button" role="radio" aria-checked="true" data-preset="balanced">Balanced</button>
+          <button type="button" role="radio" aria-checked="false" data-preset="best">Best quality</button>
+          <button type="button" role="radio" aria-checked="false" data-preset="custom" id="presetCustom" disabled>Custom</button>
+        </div>
+        <div class="range-row" id="qualityRow">
+          <div class="range-head"><label for="quality">Quality</label><output for="quality" id="qualityOut">75</output></div>
+          <input type="range" id="quality" min="1" max="100" step="1" value="75" data-bind="right.quality" aria-describedby="qualityNote">
+          <p class="small" id="qualityNote">Higher quality keeps more detail but makes the file bigger.</p>
+        </div>
+      </section>
+
+      <section class="sec" aria-labelledby="h-tweaks">
+        <h2 id="h-tweaks">Optional tweaks</h2>
+        <div class="opt-stack">
+          <label class="switch"><input type="checkbox" role="switch" data-bind="right.resize.on"><span class="track"></span>Resize</label>
+          <div class="subopts" id="resizeSub" hidden>
+            <label class="field" for="widthInput">Width
+              <span class="input-unit"><input class="input" id="widthInput" type="number" min="1" max="8000" data-bind="right.resize.width" inputmode="numeric"><span class="unit">px</span></span>
+            </label>
+            <p class="small" id="heightNote">Height follows automatically to keep the picture in proportion.</p>
+          </div>
+          <label class="switch"><input type="checkbox" role="switch" data-bind="right.palette.on"><span class="track"></span>Reduce colors</label>
+          <div class="subopts" id="paletteSub" hidden>
+            <div>
+              <div class="range-head"><label for="colorsInput">Number of colors</label><output for="colorsInput" id="colorsOut">256</output></div>
+              <input type="range" id="colorsInput" min="2" max="256" step="1" data-bind="right.palette.colors">
+              <p class="small">Fewer colors make a smaller file, best for logos and drawings.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <details class="disclosure" id="compareDisclosure">
+        <summary>Compare with another setting<svg class="ic"><use href="#i-chev"/></svg></summary>
+        <div class="disc-body">
+          <p class="small">The left half of the preview normally shows your original. Pick another format or quality to compare two results against each other.</p>
+          <label class="field" for="leftEnc">Left side
+            <select class="input" id="leftEnc" data-bind="left.encoder" data-enc-list></select>
+          </label>
+          <div data-left-quality hidden>
+            <div class="range-head"><label for="leftQ">Quality</label><output for="leftQ" id="leftQOut">75</output></div>
+            <input type="range" id="leftQ" min="1" max="100" data-bind="left.quality">
+          </div>
+          <p class="small" id="leftResult" aria-live="polite">Left side is your original image.</p>
+        </div>
+      </details>
+
+      <details class="disclosure" id="advanced">
+        <summary>Advanced settings<svg class="ic"><use href="#i-chev"/></svg></summary>
+        <div class="disc-body">
+          <p class="small">Every encoder and option, for each side of the preview.</p>
+          <div id="advLeft" data-side-options="left"></div>
+          <div id="advRight" data-side-options="right"></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="resultbar" id="resultbar">
+      <div>
+        <p class="result-title"><span id="resultLead">Your image is</span> <span class="pill pill-green" id="pill">92% smaller</span></p>
+        <p class="result-sizes"><span class="old" id="oldSize">2.8 MB</span><svg class="ic ic-sm"><use href="#i-arrow"/></svg><span class="new" id="newSize">214 KB</span></p>
+      </div>
+      <button class="btn btn-primary btn-lg" id="download" type="button"><svg class="ic"><use href="#i-download"/></svg>Download</button>
+      <p class="result-safe"><svg class="ic"><use href="#i-lock"/></svg>Stays on your device</p>
+    </div>
+  </aside>
+</main>
+
+<p class="sr-only" id="srStatus" role="status" aria-live="polite"></p>
+<div class="snackbar" id="snackbar" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+</body>
+</html>

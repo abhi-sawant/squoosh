@@ -1,109 +1,89 @@
 range-input {
   position: relative;
   display: flex;
-  height: 18px;
+  height: 32px;
   width: 130px;
-  margin: 2px;
+  margin: 0;
   font: inherit;
-  line-height: 16px;
   overflow: visible;
 }
 
-/* Disabled inputs are greyed out */
+/* Disabled inputs are muted */
 range-input[disabled] {
-  filter: grayscale(1);
+  opacity: 0.5;
 }
 
 range-input::before {
   content: '';
   display: block;
   position: absolute;
-  top: 8px;
+  top: 11px;
   left: 0;
   width: 100%;
-  height: 2px;
-  border-radius: 1px;
-  background: linear-gradient(var(--main-theme-color), var(--main-theme-color))
-    0 / var(--value-percent, 0%) 100% no-repeat var(--medium-light-gray);
+  height: 10px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  border: 1px solid var(--sage-200);
+  background: linear-gradient(var(--leaf), var(--leaf)) 0 /
+    var(--value-percent, 0%) 100% no-repeat var(--sage-100);
 }
 
 .input {
   position: relative;
   width: 100%;
+  height: 100%;
   padding: 0;
   margin: 0;
   opacity: 0;
+  cursor: pointer;
 }
 
 .thumb {
   pointer-events: none;
   position: absolute;
-  bottom: 3px;
+  bottom: 2px;
   left: 0;
-  margin-left: -6px;
-  background: var(--main-theme-color);
+  margin-left: -14px;
+  box-sizing: border-box;
+  background: var(--green);
+  border: 4px solid #fff;
   border-radius: 50%;
-  width: 12px;
-  height: 12px;
+  width: 28px;
+  height: 28px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 200ms var(--ease);
+}
+
+range-input:hover .thumb {
+  transform: scale(1.08);
 }
 
 range-input:focus-within .thumb {
-  outline: white solid 2px;
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
 }
 
 .thumb-wrapper {
   position: absolute;
-  left: 6px;
-  right: 6px;
+  left: 14px;
+  right: 14px;
   bottom: 0;
   height: 0;
   overflow: visible;
   transform: translate(var(--value-percent, 0%), 0);
 }
 
+/* The value is shown in the number pill next to the label instead. */
 .value-display {
-  position: absolute;
-  box-sizing: border-box;
-  left: 0;
-  bottom: 3px;
-  width: 32px;
-  height: 62px;
-  text-align: center;
-  padding: 8px 3px 0;
-  margin: 0 0 0 -16px;
-  transform-origin: 50% 90%;
-  opacity: 0.0001;
-  transform: scale(0.2);
-  color: #fff;
-  font: inherit;
-  font-size: calc(100% - var(--value-width, 3) / 5 * 0.2em);
-  text-overflow: clip;
-  text-shadow: 0 -0.5px 0 rgba(0, 0, 0, 0.4);
-  transition: all 200ms ease;
-  transition-property: opacity, transform;
-  will-change: transform;
-  pointer-events: none;
-  overflow: hidden;
-
-  > svg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    fill: var(--main-theme-color);
-  }
-
-  > span {
-    position: relative;
-  }
-}
-
-.touch-active + .thumb-wrapper .value-display {
-  opacity: 1;
-  transform: scale(1);
+  display: none;
 }
 
 .touch-active + .thumb-wrapper .thumb {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  transform: scale(1.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .thumb {
+    transition: none;
+  }
 }

@@ -11,96 +11,86 @@ snack-bar {
 .snackbar {
   position: fixed;
   display: flex;
+  align-items: center;
+  gap: 8px;
   box-sizing: border-box;
   left: 50%;
   bottom: 24px;
-  width: 344px;
-  margin-left: -172px;
-  background: #2a2a2a;
-  border-radius: 2px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
-  transform-origin: center;
-  color: #eee;
+  width: max-content;
+  min-width: 280px;
+  max-width: min(92vw, 520px);
+  transform: translateX(-50%);
+  background: var(--ink);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  color: #fff;
+  font: 500 1rem/1.4 var(--font-body);
   z-index: 100;
   cursor: default;
   will-change: transform;
-  animation: snackbar-show 300ms ease forwards 1;
+  animation: snackbar-show 300ms var(--ease) forwards 1;
 }
 .snackbar[aria-hidden='true'] {
-  animation: snackbar-hide 300ms ease forwards 1;
+  animation: snackbar-hide 300ms var(--ease) forwards 1;
 }
 @keyframes snackbar-show {
   from {
     opacity: 0;
-    transform: scale(0.5);
+    transform: translate(-50%, 24px);
   }
 }
 @keyframes snackbar-hide {
   to {
     opacity: 0;
-    transform: translateY(100%);
+    transform: translate(-50%, 24px);
   }
 }
 
 @media (max-width: 400px) {
   .snackbar {
-    width: 100%;
-    bottom: 0;
-    left: 0;
-    margin-left: 0;
-    border-radius: 0;
+    bottom: 16px;
+    min-width: 0;
+    width: calc(100% - 32px);
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .snackbar,
+  .snackbar[aria-hidden='true'] {
+    animation-duration: 1ms;
   }
 }
 
 .text {
   flex: 1 1 auto;
-  padding: 16px;
-  font-size: 100%;
+  padding: 14px 8px 14px 24px;
 }
 
 .button {
   position: relative;
-  flex: 0 1 auto;
-  padding: 8px;
-  height: 100%;
-  margin: auto 8px auto -8px;
-  min-width: 5em;
-  background: none;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 18px;
+  margin: 0 6px 0 0;
+  background: var(--butter);
   border: none;
-  border-radius: 3px;
-  color: lightgreen;
-  font-weight: inherit;
-  letter-spacing: 0.05em;
-  font-size: 100%;
-  text-transform: uppercase;
+  border-radius: 999px;
+  color: var(--ink);
+  font: 600 0.9375rem var(--font-body);
   text-align: center;
-  cursor: pointer;
-  overflow: hidden;
-  transition: background-color 200ms ease;
-  outline: none;
   text-decoration: none;
+  cursor: pointer;
+  transition: background-color 200ms var(--ease);
 }
 .button:hover {
-  background-color: rgba(0, 0, 0, 0.15);
+  background: #fff;
 }
-.button:focus:before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 120%;
-  height: 0;
-  padding: 0 0 120%;
-  margin: -60% 0 0 -60%;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  transform-origin: center;
-  will-change: transform;
-  animation: focus-ring 300ms ease-out forwards 1;
-  pointer-events: none;
-}
-@keyframes focus-ring {
-  from {
-    transform: scale(0.01);
-  }
+.button:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
 }

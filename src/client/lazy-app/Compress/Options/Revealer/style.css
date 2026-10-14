@@ -1,13 +1,14 @@
 .checkbox {
   display: inline-block;
   position: relative;
+  line-height: 0;
 }
 
 .arrow {
-  width: 10px;
-  height: 10px;
-  fill: var(--white);
-  transition: transform 200ms ease;
+  width: 20px;
+  height: 20px;
+  color: var(--ink);
+  transition: transform 250ms var(--ease);
   transform: rotate(-90deg);
 
   svg {
@@ -19,11 +20,24 @@
 
 .real-checkbox {
   top: 0;
+  left: 0;
   position: absolute;
   opacity: 0;
   pointer-events: none;
 
   &:checked + .arrow {
     transform: none;
+  }
+}
+
+.checkbox:focus-within .arrow {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow {
+    transition: none;
   }
 }

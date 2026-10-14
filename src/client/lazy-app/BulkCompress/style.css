@@ -1,197 +1,286 @@
 .bulk {
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
-  contain: strict;
-  overflow: hidden;
-  display: grid;
-  grid-template-rows: 1fr max-content;
-  grid-template-areas:
-    'grid'
-    'opts';
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 2"><path d="M1 2V0h1v1H0v1z" fill-opacity=".025"/></svg>');
-  background-size: 20px 20px;
-  background-color: #2f2f2f;
+  overflow-y: auto;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  padding: 16px 16px 0;
 
-  @media (min-width: 600px) {
-    grid-template-rows: 1fr;
-    grid-template-columns: 1fr 320px;
-    grid-template-areas: 'grid opts';
+  @media (min-width: 700px) {
+    padding: 24px 32px 0;
   }
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding-bottom: 20px;
+  max-width: 1240px;
+  margin: 0 auto;
 }
 
 .back {
   composes: unbutton from global;
-  position: absolute;
-  z-index: 2;
-  top: 9px;
-  left: 9px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px 0 14px;
+  border-radius: 999px;
+  border: 2px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  font: 600 0.9375rem var(--font-body);
+  cursor: pointer;
+  transition: background-color 0.25s var(--ease), border-color 0.25s var(--ease);
 
   & > svg {
-    width: 47px;
-    overflow: visible;
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
-  @media (min-width: 600px) {
-    & > svg {
-      width: 58px;
-    }
+  &:hover {
+    border-color: var(--leaf);
+    background: var(--sage-50);
   }
-}
 
-.back-blob {
-  fill: var(--hot-pink);
-  opacity: 0.77;
-}
-
-.back-x {
-  fill: var(--white);
-}
-
-.grid-area {
-  grid-area: grid;
-  overflow-y: auto;
-  padding: 70px 20px 20px;
-  color: var(--white);
+  &:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
 }
 
 .heading {
-  margin: 0 0 20px;
-  font-size: 1.6rem;
-  font-weight: 700;
-  display: flex;
-  flex-direction: column;
+  margin: 0;
+  font: 600 clamp(1.75rem, 3.6vw, 2.5rem) / 1.15 var(--font-head);
+  color: var(--green-ink);
 }
 
 .sub-heading {
-  font-size: 1rem;
-  font-weight: 400;
-  opacity: 0.7;
-  margin-top: 4px;
+  margin: 4px 0 0;
+  color: var(--ink-soft);
+  font-size: 1.0625rem;
+  font-variant-numeric: tabular-nums;
 }
 
-.options-area {
-  grid-area: opts;
-  --options-radius: 7px;
-  display: flex;
-  flex-direction: column;
-  /* Anchor the panel to the bottom edge and let it grow upward as sections
-   * expand — mirroring the single-image editor's floating options panel. */
-  justify-content: flex-end;
-  overflow: hidden;
-  max-height: 45vh;
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+  max-width: 1240px;
+  margin: 0 auto;
 
-  @media (min-width: 600px) {
-    max-height: none;
+  @media (min-width: 1000px) {
+    grid-template-columns: minmax(0, 1fr) 380px;
+    gap: 28px;
+    padding-bottom: 48px;
   }
 }
 
-/* Provide the theme variables the reused single-image Options panel expects.
- * Mirror the single editor's right-hand panel (.options-2-theme) so the bulk
- * config UI is blue, and inherit the same base color/font-size as .options so
- * the panel's em-based row spacing matches the single-image flow. */
-.options-theme {
-  --main-theme-color: var(--blue);
-  --hot-theme-color: var(--deep-blue);
-  --header-text-color: var(--dark-text);
-  --scroller-radius: var(--options-radius) var(--options-radius) 0 0;
-  color: var(--white);
-  font-size: 1.2rem;
+.grid-area {
+  min-width: 0;
+  padding-bottom: 8px;
+}
+
+/* Desktop: a sticky white card. Mobile: the card is only the settings, and
+ * the actions bar sticks to the bottom of the screen. */
+.panel {
+  display: contents;
+
+  @media (min-width: 1000px) {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    max-height: calc(100vh - 32px);
+    overflow: hidden;
+  }
+}
+
+.settings {
+  order: -1;
+  background: var(--surface);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  /* Content-height by default; shrinks (and the scroller scrolls) only when
-   * the expanded sections are taller than the available space. */
   min-height: 0;
 
-  & > * {
-    min-height: 0;
+  @media (min-width: 1000px) {
+    order: 0;
+    flex: 1;
+    overflow-y: auto;
+    border-radius: 0;
+    box-shadow: none;
   }
 }
 
 .actions {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 18px;
-  padding: 14px 16px;
-  /* Blend into the floating card so the FABs read as part of it. */
-  background: var(--off-black);
-  /* Stay anchored at the bottom of the floating card. */
-  flex-shrink: 0;
-  border-radius: 0 0 var(--options-radius) var(--options-radius);
-}
-
-/* Circular blob FAB, matching the single-image editor's download button. */
-.fab {
-  composes: unbutton from global;
-  --size: 56px;
-  width: var(--size);
-  height: var(--size);
-  position: relative;
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
   display: grid;
-  place-items: center;
-  cursor: pointer;
-  transition: opacity 0.2s;
+  gap: 12px;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  margin: 0 -16px;
+  background: var(--surface);
+  box-shadow: 0 -6px 20px rgba(31, 58, 45, 0.1);
 
-  loading-spinner {
-    grid-area: 1 / 1;
-    position: relative;
-    --color: var(--white);
-    --size: 24px;
+  @media (min-width: 700px) {
+    margin: 0 -32px;
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  @media (min-width: 1000px) {
+    position: static;
+    margin: 0;
+    padding: 20px 24px 24px;
+    gap: 16px;
+    box-shadow: none;
+    border-top: 2px solid var(--line);
+    flex-shrink: 0;
   }
 }
 
-.fab:disabled {
-  opacity: 0.4;
-  cursor: default;
+.progress {
+  display: grid;
+  gap: 6px;
 }
 
-.fab-blobs {
-  position: absolute;
-  inset: 0;
-  width: 100%;
+.progress-text {
+  margin: 0;
+  font: 600 1.0625rem var(--font-head);
+  font-variant-numeric: tabular-nums;
+}
+
+.track {
+  height: 12px;
+  border-radius: 999px;
+  background: var(--sage-100);
+  overflow: hidden;
+}
+
+.track-fill {
   height: 100%;
+  background: var(--leaf);
+  border-radius: 999px;
+  transition: width 0.35s var(--ease);
+}
 
-  path {
-    fill: var(--deep-blue);
-    opacity: 0.85;
+.saved {
+  margin: 0;
+  color: var(--green-ink);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.buttons {
+  display: grid;
+  gap: 10px;
+
+  @media (max-width: 999px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: 420px) {
+    grid-template-columns: 1fr;
   }
 }
 
-.fab-icon {
-  grid-area: 1 / 1;
+.primary,
+.secondary {
+  composes: unbutton from global;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 24px;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  font: 600 1rem var(--font-head);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color 0.25s var(--ease), border-color 0.25s var(--ease),
+    transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
 
-  svg {
-    --icon-size: 23px;
-    width: var(--icon-size);
-    height: var(--icon-size);
-    fill: var(--white);
-    display: block;
-    /* Lift the icon above the absolutely-positioned blob backdrop. */
-    position: relative;
-    animation: fab-icon-enter 0.2s;
+  & svg {
+    width: 20px;
+    height: 20px;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  &[disabled] {
+    background: var(--sage-100);
+    color: var(--ink-soft);
+    border-color: transparent;
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  &[aria-busy='true'] {
+    cursor: progress;
   }
 }
 
-/* Busy state (converting / zipping): hide the icon, the spinner shows instead. */
-.fab-busy {
-  composes: fab;
-  pointer-events: none;
+.primary {
+  background: var(--peach);
+  box-shadow: 0 4px 14px rgba(255, 143, 107, 0.4);
 
-  .fab-icon svg {
-    opacity: 0;
+  &:hover:not([disabled]) {
+    background: var(--peach-hover);
+    transform: translateY(-1px);
   }
 }
 
-@keyframes fab-icon-enter {
-  from {
-    opacity: 0;
-    transform: rotate(-90deg);
+.secondary {
+  background: var(--surface);
+  border-color: var(--line);
+
+  &:hover:not([disabled]) {
+    border-color: var(--leaf);
+    background: var(--sage-50);
   }
+}
+
+.spin {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  border-radius: 50%;
+  border: 3px solid var(--sage-200);
+  border-top-color: var(--green);
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
   to {
-    opacity: 1;
-    transform: rotate(0);
+    transform: rotate(360deg);
   }
 }
 
@@ -199,7 +288,23 @@
   position: fixed;
   inset: 0;
   z-index: 10;
-  background: var(--off-black);
+  background: rgba(31, 58, 45, 0.45);
+  display: grid;
+  padding: 12px;
+  animation: fade-in 0.25s var(--ease);
+
+  @media (min-width: 700px) {
+    padding: 28px;
+  }
+}
+
+.modal-sheet {
+  position: relative;
+  min-height: 0;
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  box-shadow: 0 24px 60px rgba(31, 58, 45, 0.3);
+  overflow: hidden;
 }
 
 .modal-inner {
@@ -212,13 +317,51 @@
   position: absolute;
   z-index: 12;
   top: 12px;
-  right: 16px;
-  width: 40px;
-  height: 40px;
+  right: 12px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.5);
-  color: var(--white);
-  font-size: 1.3rem;
-  line-height: 40px;
-  text-align: center;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: background-color 0.25s var(--ease);
+
+  & > svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+
+  &:hover {
+    background: var(--sage-100);
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal,
+  .spin {
+    animation-duration: 0.01ms;
+  }
+  .track-fill,
+  .primary,
+  .secondary {
+    transition: none;
+  }
 }

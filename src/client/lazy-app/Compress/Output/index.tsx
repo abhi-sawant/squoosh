@@ -1,4 +1,4 @@
-import { h, Component, Fragment } from 'preact';
+import { h, Component } from 'preact';
 import type PinchZoom from './custom-els/PinchZoom';
 import type { ScaleToOpts } from './custom-els/PinchZoom';
 import './custom-els/PinchZoom';
@@ -30,6 +30,8 @@ interface Props {
   leftImgContain: boolean;
   rightImgContain: boolean;
   onPreprocessorChange: (newState: PreprocessorState) => void;
+  /** Go back to choose another picture. */
+  onAdd?: () => void;
 }
 
 interface State {
@@ -263,7 +265,7 @@ export default class Output extends Component<Props, State> {
   };
 
   render(
-    { mobileView, leftImgContain, rightImgContain, source }: Props,
+    { mobileView, leftImgContain, rightImgContain, source, onAdd }: Props,
     { scale, editingScale, altBackground, aliasing }: State,
   ) {
     const leftDraw = this.leftDrawable();
@@ -272,7 +274,7 @@ export default class Output extends Component<Props, State> {
     const originalImage = source && source.preprocessed;
 
     return (
-      <Fragment>
+      <div class={style.stage}>
         <div
           class={`${style.output} ${altBackground ? style.altBackground : ''}`}
         >
@@ -331,9 +333,14 @@ export default class Output extends Component<Props, State> {
             </pinch-zoom>
           </two-up>
         </div>
-        <div class={style.controls}>
+        <div class={style.controls} role="toolbar" aria-label="Picture view">
           <div class={style.buttonGroup}>
-            <button class={style.firstButton} onClick={this.zoomOut}>
+            <button
+              class={style.button}
+              onClick={this.zoomOut}
+              aria-label="Zoom out"
+              title="Zoom out"
+            >
               <RemoveIcon />
             </button>
             {editingScale ? (
@@ -344,6 +351,7 @@ export default class Output extends Component<Props, State> {
                 max="1000000"
                 ref={linkRef(this, 'scaleInput')}
                 class={style.zoom}
+                aria-label="Zoom percent"
                 value={Math.round(scale * 100)}
                 onInput={this.onScaleInputChanged}
                 onBlur={this.onScaleInputBlur}
@@ -352,28 +360,32 @@ export default class Output extends Component<Props, State> {
               <span
                 class={style.zoom}
                 tabIndex={0}
+                role="button"
+                aria-label={`Zoom ${Math.round(
+                  scale * 100,
+                )} percent. Press to type a value.`}
                 onFocus={this.onScaleValueFocus}
               >
                 <span class={style.zoomValue}>{Math.round(scale * 100)}</span>%
               </span>
             )}
-            <button class={style.lastButton} onClick={this.zoomIn}>
+            <button
+              class={style.button}
+              onClick={this.zoomIn}
+              aria-label="Zoom in"
+              title="Zoom in"
+            >
               <AddIcon />
             </button>
           </div>
           <div class={style.buttonGroup}>
-            <button
-              class={style.firstButton}
-              onClick={this.onRotateClick}
-              title="Rotate"
-            >
-              <RotateIcon />
-            </button>
             {!isSafari && (
               <button
-                class={style.button}
+                class={`${style.button} ${aliasing ? style.active : ''}`}
                 onClick={this.toggleAliasing}
-                title="Toggle smoothing"
+                aria-pressed={aliasing}
+                aria-label="Show sharp pixels instead of smooth"
+                title="Sharp pixels or smooth"
               >
                 {aliasing ? (
                   <ToggleAliasingActiveIcon />
@@ -383,9 +395,11 @@ export default class Output extends Component<Props, State> {
               </button>
             )}
             <button
-              class={style.lastButton}
+              class={`${style.button} ${altBackground ? style.active : ''}`}
               onClick={this.toggleBackground}
-              title="Toggle background"
+              aria-pressed={altBackground}
+              aria-label="Show checkerboard behind the picture"
+              title="Checkerboard or plain background"
             >
               {altBackground ? (
                 <ToggleBackgroundActiveIcon />
@@ -393,9 +407,27 @@ export default class Output extends Component<Props, State> {
                 <ToggleBackgroundIcon />
               )}
             </button>
+            <button
+              class={style.button}
+              onClick={this.onRotateClick}
+              aria-label="Rotate 90 degrees"
+              title="Rotate"
+            >
+              <RotateIcon />
+            </button>
+            {onAdd && (
+              <button
+                class={`${style.button} ${style.addButton}`}
+                onClick={onAdd}
+                aria-label="Add another picture"
+                title="Add another picture"
+              >
+                <AddIcon />
+              </button>
+            )}
           </div>
         </div>
-      </Fragment>
+      </div>
     );
   }
 }

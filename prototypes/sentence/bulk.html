@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Squoosh: convert many pictures</title>
+<meta name="theme-color" content="#FBFCFE">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="bulk">
+<a class="skip" href="#main">Skip to main content</a>
+<header class="top">
+  <a class="back" href="index.html"><svg class="i" aria-hidden="true"><use href="#i-back"/></svg>Start over</a>
+  <a class="brand" href="index.html" aria-label="Squoosh home">Squoosh</a>
+  <p class="private"><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg><span>Stays on your device</span></p>
+</header>
+
+<div class="bulk-head">
+  <h1>Bulk convert</h1>
+  <p class="sub" id="sub">12 pictures · 7 converted</p>
+</div>
+
+<main id="main" class="bulk">
+  <section class="compose" aria-labelledby="sh">
+    <h2 id="sh" class="sr-only">One sentence for every picture</h2>
+    <p class="sentence" id="sentence" role="group" aria-labelledby="sh">Convert all <span id="count">12</span> pictures to
+      <button type="button" class="blank" data-key="format"><span class="blank-text">WebP</span><svg class="i" aria-hidden="true"><use href="#i-chev"/></svg></button>
+      at <button type="button" class="blank" data-key="quality"><span class="blank-text">Balanced</span><svg class="i" aria-hidden="true"><use href="#i-chev"/></svg></button> quality,
+      <button type="button" class="blank" data-key="resize"><span class="blank-text">shrunk to 50%</span><svg class="i" aria-hidden="true"><use href="#i-chev"/></svg></button>.</p>
+    <p class="hint-line">These choices apply to every picture below.</p>
+  </section>
+
+  <section class="actions sticky" aria-label="Progress and actions">
+    <div class="progress">
+      <p class="line" id="progressLine">Converting 7 of 12</p>
+      <div class="bar" id="barWrap" role="progressbar" aria-label="Pictures converted" aria-valuemin="0" aria-valuemax="12" aria-valuenow="7"><i id="bar"></i></div>
+      <p class="saved" id="saved">You saved 18.4 MB</p>
+    </div>
+    <div class="btns">
+      <button type="button" class="btn primary" id="convertAll">Convert all</button>
+      <button type="button" class="btn secondary" id="zip"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg> Download all as ZIP</button>
+    </div>
+  </section>
+
+  <ul class="grid" id="grid" aria-label="Your pictures"></ul>
+  <noscript><p class="note">This page needs JavaScript to show your pictures.</p></noscript>
+
+  <details class="more" id="more">
+    <summary><span>More options</span><svg class="i" aria-hidden="true"><use href="#i-chev"/></svg></summary>
+    <div class="side" style="margin-top:20px"><h3>Settings for every picture</h3><div id="bulk-form"></div></div>
+  </details>
+  <div><button type="button" class="tool" id="addMore"><svg class="i" aria-hidden="true"><use href="#i-plus"/></svg><span>Add more pictures</span></button><input type="file" id="addFile" accept="image/*" multiple hidden></div>
+</main>
+
+<dialog id="dlg" aria-labelledby="dlgTitle">
+  <div class="dlg-head"><h2 id="dlgTitle">Picture</h2><button type="button" class="icon-btn" id="dlgClose" aria-label="Close comparison"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+  <div class="dlg-body">
+    <div class="preview">
+      <div class="cmp" id="dcmp">
+        <div class="cmp-viewport">
+          <div class="cmp-stage bg-checker">
+            <div class="cmp-layer right"><img src="../assets/photo.jpg" alt="Converted picture"><span class="cmp-tag">Converted</span></div>
+            <div class="cmp-layer left"><img src="../assets/photo.jpg" alt="Original picture"><span class="cmp-tag">Original</span></div>
+            <div class="cmp-handle" role="slider" tabindex="0" aria-label="Compare original and converted. Use the left and right arrow keys." aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="knob"><svg class="i" aria-hidden="true"><use href="#i-arrowsplit"/></svg></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="result-bar"><p class="result" id="dlgSummary"></p><button type="button" class="btn primary" id="dlgDownload"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg> Download</button></div>
+  </div>
+</dialog>
+
+<div id="snack" class="snack" role="status"></div>
+<div id="live" class="sr-only" aria-live="polite"></div>
+<script src="app.js"></script>
+</body>
+</html>

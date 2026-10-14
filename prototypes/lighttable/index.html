@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Squoosh</title>
+<meta name="description" content="Compress and compare images in your browser. Nothing is uploaded.">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#3b3d41">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Hanken+Grotesk:wght@400;500;600;700&family=Martian+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="index">
+<div class="intro">
+  <header class="masthead">
+    <h1 class="wordmark">Squoosh</h1>
+    <p class="tagline">Compress and compare images right in your browser.</p>
+  </header>
+
+  <main class="tabletop">
+    <section class="mat" id="drop" aria-labelledby="dropTitle">
+      <h2 class="mat-title" id="dropTitle">Drop images here, or paste</h2>
+      <p class="mat-sub">One image opens the editor. Several open bulk convert.</p>
+      <div class="mat-actions">
+        <button class="btn mark big" id="browse" type="button"><i class="ico" data-i="folder"></i>Browse</button>
+        <button class="btn ghost big" id="paste" type="button" hidden><i class="ico" data-i="paste"></i>Paste</button>
+      </div>
+      <p class="edge mat-edge">Accepts JPEG PNG WEBP AVIF SVG</p>
+      <p class="mat-over" aria-hidden="true">Release to open</p>
+      <input type="file" id="file" accept="image/*,.heic,.tiff,.tif" multiple hidden>
+    </section>
+
+    <section class="slides-wrap" aria-labelledby="slidesTitle">
+      <p class="slides-title" id="slidesTitle">Or try one of these:</p>
+      <ul class="slides">
+        <li><a class="slide" href="editor.html?img=photo">
+          <div class="slide-pic"><img class="top" src="../assets/photo.jpg" alt="Landscape photograph, a coastal road at dusk" width="1400" height="541"></div>
+          <span class="slide-name">Large photo</span><span class="edge">2.8 MB</span></a></li>
+        <li><a class="slide" href="editor.html?img=art">
+          <div class="slide-pic"><img src="../assets/artwork.jpg" alt="Colourful illustrated artwork" width="1400" height="937"></div>
+          <span class="slide-name">Artwork</span><span class="edge">2.9 MB</span></a></li>
+        <li><a class="slide" href="editor.html?img=screen">
+          <div class="slide-pic"><img class="top" src="../assets/screen.jpg" alt="Phone screenshot of a device home screen" width="587" height="1200"></div>
+          <span class="slide-name">Device screen</span><span class="edge">1.6 MB</span></a></li>
+        <li><a class="slide" href="editor.html?img=svg">
+          <div class="slide-pic"><svg viewBox="0 0 512 512" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Squoosh logo: a small vermilion box squeezed inside a larger outlined box"><rect width="512" height="512" fill="#f5f3ee"/><rect x="104" y="104" width="304" height="304" rx="60" fill="none" stroke="#1f2023" stroke-width="26"/><rect x="176" y="204" width="160" height="104" rx="26" fill="#ff4b2b"/></svg></div>
+          <span class="slide-name">SVG icon</span><span class="edge">13 kB</span></a></li>
+      </ul>
+    </section>
+
+    <aside class="notes" aria-label="About Squoosh">
+      <article class="note note-small">
+        <h2>Small</h2>
+        <p>Smaller images mean faster load times. Squoosh can reduce file size and maintain high quality.</p>
+      </article>
+      <article class="note note-simple">
+        <h2>Simple</h2>
+        <p>Open your image, inspect the differences, then save instantly. Feeling adventurous? Adjust the settings for even smaller files.</p>
+      </article>
+      <article class="note note-secure">
+        <h2>Secure</h2>
+        <p>Worried about privacy? Images never leave your device since Squoosh does all the work locally.</p>
+      </article>
+    </aside>
+  </main>
+
+  <footer class="strip" aria-label="Site links">
+    <a href="#privacy">Privacy</a><span class="sep" aria-hidden="true"></span>
+    <a href="https://github.com/GoogleChromeLabs/squoosh" rel="noopener">Source on Github</a><span class="sep" aria-hidden="true"></span>
+    <a href="https://github.com/GoogleChromeLabs/squoosh" rel="noopener">fork of Squoosh</a>
+    <button type="button" id="install" hidden><i class="ico" data-i="install"></i>Install</button>
+  </footer>
+</div>
+<div class="snackbar" id="snackbar" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+</body>
+</html>

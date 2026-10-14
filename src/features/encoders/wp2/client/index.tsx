@@ -9,7 +9,6 @@ import Select from 'client/lazy-app/Compress/Options/Select';
 import Checkbox from 'client/lazy-app/Compress/Options/Checkbox';
 import Expander from 'client/lazy-app/Compress/Options/Expander';
 import linkState from 'linkstate';
-import Revealer from 'client/lazy-app/Compress/Options/Revealer';
 
 export const encode = (
   signal: AbortSignal,
@@ -81,7 +80,7 @@ export class Options extends Component<Props, State> {
     lossless: false,
     slightLoss: 0,
     quality: defaultOptions.quality,
-    showAdvanced: false,
+    showAdvanced: true,
   } as State;
 
   private _inputChangeCallbacks = new Map<string, (event: Event) => void>();
@@ -180,7 +179,7 @@ export class Options extends Component<Props, State> {
         <Expander>
           {!lossless && (
             <div>
-              <div class={style.optionOneCell}>
+              <div class={`${style.optionOneCell} ${style.qualityRow}`}>
                 <Range
                   min="0"
                   max="95"
@@ -213,13 +212,6 @@ export class Options extends Component<Props, State> {
                   </div>
                 )}
               </Expander>
-              <label class={style.optionReveal}>
-                <Revealer
-                  checked={showAdvanced}
-                  onChange={linkState(this, 'showAdvanced')}
-                />
-                Advanced settings
-              </label>
               <Expander>
                 {showAdvanced && (
                   <div>

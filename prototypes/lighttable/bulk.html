@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Squoosh bulk convert</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#3b3d41">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Hanken+Grotesk:wght@400;500;600;700&family=Martian+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="bulk" data-page="bulk">
+<header class="bulk-head">
+  <a class="btn" href="index.html" aria-label="Back to start"><i class="ico" data-i="back"></i><span class="lbl">Back</span></a>
+  <div>
+    <h1>Bulk convert</h1>
+    <p class="sub-line" id="subline">12 images · 7 converted</p>
+  </div>
+</header>
+
+<div class="bulk-main">
+  <main class="sheet-wrap" aria-label="Contact sheet">
+    <ul class="grid" id="grid"></ul>
+  </main>
+  <aside class="bulk-side" aria-label="Conversion settings">
+    <div class="bulk-actions">
+      <div class="roll" id="roll" role="status" aria-live="polite">
+        <p class="main" id="rollMain"></p>
+        <p class="edge" id="rollEdge"></p>
+        <div class="prog" id="prog" role="progressbar" aria-label="Images converted" aria-valuemin="0" aria-valuemax="12" aria-valuenow="7"><span class="prog-fill"></span><span class="prog-ticks"></span></div>
+      </div>
+      <button class="btn mark" type="button" id="convert"><i class="ico" data-i="play"></i><span>Convert all</span></button>
+      <button class="btn" type="button" id="zip"><i class="ico" data-i="download"></i><span>Download all (ZIP)</span></button>
+    </div>
+    <div class="bulk-options" id="opts"></div>
+  </aside>
+</div>
+
+<dialog class="lb" id="lightbox" aria-labelledby="lbName">
+  <div class="lb-bar">
+    <div class="lb-title"><span class="fno" id="lbNo">01</span><span class="fn" id="lbName"></span></div>
+    <button class="btn icon" type="button" id="lbClose" aria-label="Close comparison"><i class="ico" data-i="close"></i></button>
+  </div>
+  <div class="lb-stage" id="lbStage">
+    <div class="sheet" id="lbSheet" data-cmp-scope>
+      <div class="cmp-host" id="lbCmp"></div>
+      <div class="sheet-meta"><p class="print" id="lbPrintL"></p><p class="print r" id="lbPrintR"></p></div>
+      <div class="sheet-cap"><div class="cap" id="lbCapL"></div><div class="cap r" id="lbCapR"></div></div>
+    </div>
+  </div>
+  <div class="lb-foot">
+    <div class="fld rng"><label for="lbQ">Quality</label><output for="lbQ" id="lbQo"></output><input type="range" id="lbQ" min="0" max="100"></div>
+    <div class="fld rng"><label for="lbS">Scale</label><output for="lbS" id="lbSo"></output><input type="range" id="lbS" min="1" max="100"></div>
+    <button class="btn mark" type="button" id="lbDl"><i class="ico" data-i="download"></i>Download</button>
+  </div>
+</dialog>
+<div class="snackbar" id="snackbar" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+</body>
+</html>

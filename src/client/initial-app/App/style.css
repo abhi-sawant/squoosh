@@ -6,6 +6,7 @@
   height: 100%;
   overflow: hidden;
   contain: strict;
+  background: var(--bg);
 }
 
 .drop {
@@ -19,17 +20,16 @@
       content: '';
       position: absolute;
       display: block;
-      left: 10px;
-      top: 10px;
-      right: 10px;
-      bottom: 10px;
-      border: 2px dashed #fff;
-      background-color: rgba(0, 0, 0, 0.1);
-      border-color: var(--pink);
-      border-radius: 10px;
+      left: 12px;
+      top: 12px;
+      right: 12px;
+      bottom: 12px;
+      background-color: rgba(255, 243, 184, 0.7);
+      border-radius: var(--r-lg);
+      box-shadow: inset 0 0 0 3px rgba(140, 203, 166, 0.6);
       opacity: 0;
-      transform: scale(0.95);
-      transition: all 200ms ease-in;
+      transform: scale(0.98);
+      transition: all 300ms var(--ease);
       transition-property: transform, opacity;
       pointer-events: none;
     }
@@ -37,8 +37,14 @@
     &.drop-valid::after {
       opacity: 1;
       transform: scale(1);
-      transition-timing-function: ease-out;
     }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drop:global::after {
+    transition: none;
+    transform: none;
   }
 }
 
@@ -63,6 +69,6 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  --size: 225px;
-  --stroke-width: 26px;
+  --size: 56px;
+  --stroke-width: 6px;
 }

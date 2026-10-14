@@ -11,8 +11,8 @@ const HTMLEl = (__PRERENDER__
  * spin. You can configure the following using CSS custom properties:
  *
  * --size: Size of the spinner element (it's always square). Default: 28px.
- * --color: Color of the spinner. Default: #4285f4.
- * --stroke-width: Width of the stroke of the spinner. Default: 3px.
+ * --color: Color of the spinner. Default: var(--green).
+ * --stroke-width: Width of the stroke of the spinner. Default: 4px.
  * --delay: Once the spinner enters the DOM, how long until it shows. This prevents the spinner
  *          appearing on the screen for short operations. Default: 300ms.
  */

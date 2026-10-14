@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Squoosh: compress and compare images</title>
+<meta name="theme-color" content="#2038ff">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,100..900&family=Schibsted+Grotesk:wght@400..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="intro">
+<script src="app.js"></script>
+
+<header class="top">
+  <a class="brand" href="index.html" aria-label="Squoosh home"><svg class="ic" aria-hidden="true"><use href="#i-mark"/></svg>Squoosh</a>
+  <span class="grow"></span>
+  <button class="btn" type="button" id="install"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg>Install</button>
+</header>
+
+<main>
+  <div class="poster" id="drop">
+    <h1 class="sq line">Squoosh</h1>
+    <span class="sq line" aria-hidden="true">Squoosh</span>
+    <span class="sq line" aria-hidden="true">Squoosh</span>
+    <span class="sq line" aria-hidden="true">Squoosh</span>
+    <input type="file" id="file" class="sr" accept="image/*" multiple tabindex="-1" aria-hidden="true">
+    <button type="button" class="poster-cta" id="browse">
+      <span class="sq big">Drop images here or click to browse</span>
+      <span class="small">One image opens the editor. Two or more open bulk convert. Nothing is uploaded.</span>
+    </button>
+    <div class="poster-actions">
+      <button class="btn" type="button" id="paste" hidden><svg class="ic" aria-hidden="true"><use href="#i-paste"/></svg>Paste from clipboard</button>
+    </div>
+  </div>
+
+  <section class="demos" aria-labelledby="demo-h">
+    <h2 id="demo-h">Or try one of these:</h2>
+    <ul class="strip">
+      <li><a class="demo" href="editor.html?img=photo"><span class="thumb"><img src="../assets/photo.jpg" alt="Landscape photograph used as a demo image" width="1400" height="541"></span><span class="cap"><span class="num">2.8 MB</span><span>Large photo</span></span></a></li>
+      <li><a class="demo" href="editor.html?img=art"><span class="thumb"><img src="../assets/artwork.jpg" alt="Painted artwork used as a demo image" width="1400" height="937"></span><span class="cap"><span class="num">2.9 MB</span><span>Artwork</span></span></a></li>
+      <li><a class="demo" href="editor.html?img=pixel3"><span class="thumb"><img src="../assets/screen.jpg" alt="Phone screenshot used as a demo image" width="587" height="1200"></span><span class="cap"><span class="num">1.6 MB</span><span>Device screen</span></span></a></li>
+      <li><a class="demo" href="editor.html?img=svg"><span class="thumb"><svg viewBox="0 0 120 90" role="img" aria-label="Squoosh SVG icon" preserveAspectRatio="xMidYMid slice"><rect width="120" height="90" fill="#f3f5ff"/><path d="M22 45h28M40 31l16 14-16 14M98 45H70M80 31L64 45l16 14" fill="none" stroke="#2038ff" stroke-width="7" stroke-linecap="square"/></svg></span><span class="cap"><span class="num">13 KB</span><span>SVG icon</span></span></a></li>
+    </ul>
+  </section>
+
+  <section class="spread" aria-label="About Squoosh">
+    <article><h2 class="sq w-small">Small</h2><p>Smaller images mean faster load times. Squoosh can reduce file size and maintain high quality.</p></article>
+    <article><h2 class="sq w-simple">Simple</h2><p>Open your image, inspect the differences, then save instantly. Feeling adventurous? Adjust the settings for even smaller files.</p></article>
+    <article><h2 class="sq w-secure">Secure</h2><p>Worried about privacy? Images never leave your device since Squoosh does all the work locally.</p></article>
+  </section>
+</main>
+
+<footer class="foot">
+  <a href="#privacy">Privacy</a>
+  <a href="https://github.com/GoogleChromeLabs/squoosh">Source on Github</a>
+  <a href="https://squoosh.app">fork of Squoosh</a>
+</footer>
+
+<div class="snackbar" id="snackbar" role="status" aria-live="polite"></div>
+</body>
+</html>

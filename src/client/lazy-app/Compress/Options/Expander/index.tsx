@@ -43,8 +43,13 @@ export default class Expander extends Component<Props, State> {
 
     (this.base as HTMLElement).style.overflow = 'hidden';
 
+    const reduceMotion =
+      typeof matchMedia === 'function' &&
+      matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     await transitionHeight(this.base as HTMLElement, {
-      duration: 300,
+      duration: reduceMotion ? 0 : 300,
+      easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
       from: heightFrom,
       to: heightTo,
     });

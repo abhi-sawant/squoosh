@@ -20,17 +20,13 @@ import 'shared/custom-els/loading-spinner';
 // Reuse the single-image options panel (with `bulk` restrictions) so the
 // config UI looks identical to the single-image flow.
 import Options from '../Compress/Options';
-import { ConvertIcon, DownloadIcon } from 'client/lazy-app/icons';
 import Grid from './Grid';
+import prettyBytes from '../Compress/Results/pretty-bytes';
 
-// The decorative blob backdrop shared by the convert/download FABs — same
-// shape as the single-image editor's download button.
-const FabBlobs = () => (
-  <svg class={style.fabBlobs} viewBox="0 0 89.6 86.9">
-    <path d="M27.3 72c-8-4-15.6-12.3-16.9-21-1.2-8.7 4-17.8 10.5-26s14.4-15.6 24-16 21.2 6 28.6 16.5c7.4 10.5 10.8 25 6.6 34S64.1 71.8 54 73.6c-10.2 2-18.7 2.3-26.7-1.6z" />
-    <path d="M19.8 24.8c4.3-7.8 13-15 21.8-15.7 8.7-.8 17.5 4.8 25.4 11.8 7.8 6.9 14.8 15.2 14.7 24.9s-7.1 20.7-18 27.6c-10.8 6.8-25.5 9.5-34.2 4.8S18.1 61.6 16.7 51.4c-1.3-10.3-1.3-18.8 3-26.6z" />
-  </svg>
-);
+function formatBytes(bytes: number): string {
+  const { value, unit } = prettyBytes(bytes);
+  return `${value} ${unit}`;
+}
 
 export type BulkStatus = 'pending' | 'processing' | 'done' | 'error';
 
@@ -102,7 +98,25 @@ export default class BulkCompress extends Component<Props, State> {
     );
   }
 
+  private closeButton?: HTMLButtonElement | null;
+  private modalOpener?: Element | null;
+
+  componentDidMount(): void {
+    document.addEventListener('keydown', this.onKeyDown);
+  }
+
+  componentDidUpdate(_prevProps: Props, prevState: State): void {
+    // Move focus into the comparison modal when it opens.
+    if (
+      prevState.modalIndex === undefined &&
+      this.state.modalIndex !== undefined
+    ) {
+      this.closeButton?.focus();
+    }
+  }
+
   componentWillUnmount(): void {
+    document.removeEventListener('keydown', this.onKeyDown);
     this.abortController.abort();
     for (const item of this.state.items) {
       if (item.downloadUrl) URL.revokeObjectURL(item.downloadUrl);
@@ -277,12 +291,22 @@ export default class BulkCompress extends Component<Props, State> {
     }
   };
 
+  private onKeyDown = (event: KeyboardEvent): void => {
+    if (event.key === 'Escape' && this.state.modalIndex !== undefined) {
+      this.closeModal();
+    }
+  };
+
   private openModal = (index: number): void => {
+    this.modalOpener = document.activeElement;
     this.setState({ modalIndex: index });
   };
 
   private closeModal = (): void => {
     this.setState({ modalIndex: undefined });
+    const opener = this.modalOpener as HTMLElement | null | undefined;
+    this.modalOpener = undefined;
+    opener?.focus?.();
   };
 
   render(
@@ -298,104 +322,172 @@ export default class BulkCompress extends Component<Props, State> {
       Compress,
     }: State,
   ) {
+    const total = items.length;
     const doneCount = items.filter((item) => item.status === 'done').length;
+    const failedCount = items.filter((item) => item.status === 'error').length;
+    const finishedCount = doneCount + failedCount;
+    const savedBytes = items.reduce(
+      (sum, item) =>
+        item.status === 'done' && item.resultSize !== undefined
+          ? sum + (item.file.size - item.resultSize)
+          : sum,
+      0,
+    );
+    const pictures = total === 1 ? 'picture' : 'pictures';
+
+    let progressText: string;
+    if (converting) {
+      progressText = `Converting ${Math.min(
+        finishedCount + 1,
+        total,
+      )} of ${total}`;
+    } else if (finishedCount === 0) {
+      progressText = `Ready to convert ${total} ${pictures}`;
+    } else {
+      progressText = `${finishedCount} of ${total} done`;
+    }
+
+    let savedText: string;
+    if (doneCount === 0) savedText = 'Nothing saved yet';
+    else if (savedBytes > 0) {
+      savedText = `You've saved ${formatBytes(savedBytes)} so far`;
+    } else savedText = 'These came out a little bigger than the originals';
 
     return (
       <div class={style.bulk}>
-        <button class={style.back} onClick={onBack}>
-          <svg viewBox="0 0 61 53.3">
-            <title>Back</title>
-            <path
-              class={style.backBlob}
-              d="M0 25.6c-.5-7.1 4.1-14.5 10-19.1S23.4.1 32.2 0c8.8 0 19 1.6 24.4 8s5.6 17.8 1.7 27a29.7 29.7 0 01-20.5 18c-8.4 1.5-17.3-2.6-24.5-8S.5 32.6.1 25.6z"
-            />
-            <path
-              class={style.backX}
-              d="M41.6 17.1l-2-2.1-8.3 8.2-8.2-8.2-2 2 8.2 8.3-8.3 8.2 2.1 2 8.2-8.1 8.3 8.2 2-2-8.2-8.3z"
-            />
-          </svg>
-        </button>
-
-        <div class={style.gridArea}>
-          <h1 class={style.heading}>
-            Bulk convert
-            <span class={style.subHeading}>
-              {items.length} images · {doneCount} converted
-            </span>
-          </h1>
-          <Grid items={items} onItemClick={this.openModal} />
-        </div>
-
-        <div class={style.optionsArea}>
-          <div class={style.optionsTheme}>
-            <Options
-              index={1}
-              mobileView={false}
-              source={undefined}
-              encoderState={encoderState}
-              processorState={processorState}
-              bulk
-              resizeScale={resizeScale}
-              onResizeScaleChange={this.onResizeScaleChange}
-              onEncoderTypeChange={this.onEncoderTypeChange}
-              onEncoderOptionsChange={this.onEncoderOptionsChange}
-              onProcessorOptionsChange={this.onProcessorOptionsChange}
-              onCopyToOtherSideClick={noop}
-              onSaveSideSettingsClick={noop}
-              onImportSideSettingsClick={noop}
-            />
+        <header class={style.header}>
+          <button class={style.back} onClick={onBack} type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M19 12H5M11 6l-6 6 6 6" />
+            </svg>
+            Back
+          </button>
+          <div>
+            <h1 class={style.heading}>Bulk convert</h1>
+            <p class={style.subHeading}>
+              {total} {pictures}, {doneCount} done
+            </p>
           </div>
-          <div class={style.actions}>
-            <button
-              class={converting ? style.fabBusy : style.fab}
-              title="Convert all"
-              onClick={this.onConvert}
-              disabled={converting}
-            >
-              <FabBlobs />
-              <div class={style.fabIcon}>
-                <ConvertIcon />
+        </header>
+
+        <div class={style.layout}>
+          <section class={style.gridArea} aria-label="Your pictures">
+            <Grid items={items} onItemClick={this.openModal} />
+          </section>
+
+          <aside class={style.panel} aria-label="Settings for all pictures">
+            <div class={style.settings}>
+              <Options
+                index={1}
+                mobileView={false}
+                source={undefined}
+                encoderState={encoderState}
+                processorState={processorState}
+                bulk
+                resizeScale={resizeScale}
+                onResizeScaleChange={this.onResizeScaleChange}
+                onEncoderTypeChange={this.onEncoderTypeChange}
+                onEncoderOptionsChange={this.onEncoderOptionsChange}
+                onProcessorOptionsChange={this.onProcessorOptionsChange}
+                onCopyToOtherSideClick={noop}
+                onSaveSideSettingsClick={noop}
+                onImportSideSettingsClick={noop}
+              />
+            </div>
+            <div class={style.actions}>
+              <div class={style.progress}>
+                <p class={style.progressText} aria-live="polite">
+                  {progressText}
+                </p>
+                <div
+                  class={style.track}
+                  role="progressbar"
+                  aria-label="Conversion progress"
+                  aria-valuemin={0}
+                  aria-valuemax={total}
+                  aria-valuenow={finishedCount}
+                >
+                  <div
+                    class={style.trackFill}
+                    style={{
+                      width: `${total ? (finishedCount / total) * 100 : 0}%`,
+                    }}
+                  />
+                </div>
+                <p class={style.saved}>{savedText}</p>
               </div>
-              {converting && <loading-spinner />}
-            </button>
-            <button
-              class={zipping ? style.fabBusy : style.fab}
-              title="Download all (ZIP)"
-              onClick={this.onDownloadZip}
-              disabled={converting || zipping || doneCount === 0}
-            >
-              <FabBlobs />
-              <div class={style.fabIcon}>
-                <DownloadIcon />
+              <div class={style.buttons}>
+                <button
+                  class={style.primary}
+                  type="button"
+                  onClick={this.onConvert}
+                  disabled={converting}
+                  aria-busy={converting}
+                >
+                  {converting ? (
+                    <span class={style.spin} aria-hidden="true" />
+                  ) : (
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M4 12a8 8 0 0 1 14-5.3L20 9M20 4v5h-5M20 12a8 8 0 0 1-14 5.3L4 15M4 20v-5h5" />
+                    </svg>
+                  )}
+                  {converting ? 'Converting…' : 'Convert all'}
+                </button>
+                <button
+                  class={style.secondary}
+                  type="button"
+                  onClick={this.onDownloadZip}
+                  disabled={converting || zipping || doneCount === 0}
+                  aria-busy={zipping}
+                >
+                  {zipping ? (
+                    <span class={style.spin} aria-hidden="true" />
+                  ) : (
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 4v11M7 10l5 5 5-5M5 20h14" />
+                    </svg>
+                  )}
+                  {zipping ? 'Making your ZIP…' : 'Download all as ZIP'}
+                </button>
               </div>
-              {zipping && <loading-spinner />}
-            </button>
-          </div>
+            </div>
+          </aside>
         </div>
 
         {modalIndex !== undefined && Compress && (
           <div class={style.modal}>
-            <button
-              class={style.modalClose}
-              title="Close"
-              onClick={this.closeModal}
+            <div
+              class={style.modalSheet}
+              role="dialog"
+              aria-modal="true"
+              aria-label={`Compare ${items[modalIndex].file.name}`}
             >
-              ✕
-            </button>
-            <div class={style.modalInner}>
-              <Compress
-                key={items[modalIndex].file.name + modalIndex}
-                file={items[modalIndex].file}
-                showSnack={showSnack}
-                onBack={this.closeModal}
-                initialSettings={{
-                  encoderState,
-                  quantize: processorState.quantize,
-                  resizeScale: processorState.resize.enabled
-                    ? resizeScale / 100
-                    : undefined,
-                }}
-              />
+              <button
+                class={style.modalClose}
+                aria-label="Close comparison"
+                type="button"
+                onClick={this.closeModal}
+                ref={(el) => (this.closeButton = el)}
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+              </button>
+              <div class={style.modalInner}>
+                <Compress
+                  key={items[modalIndex].file.name + modalIndex}
+                  file={items[modalIndex].file}
+                  showSnack={showSnack}
+                  onBack={this.closeModal}
+                  initialSettings={{
+                    encoderState,
+                    quantize: processorState.quantize,
+                    resizeScale: processorState.resize.enabled
+                      ? resizeScale / 100
+                      : undefined,
+                  }}
+                />
+              </div>
             </div>
           </div>
         )}

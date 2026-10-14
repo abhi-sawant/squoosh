@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;500;600;700;800;900&family=Overpass+Mono:wght@500;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"><title>Squoosh</title><meta name="theme-color" content="#FFD400"></head>
+<body class="intro">
+<div class="page">
+  <header class="hero">
+    <div><h1>Squoosh</h1><p class="tagline">Make images smaller. Everything stays on your device.</p></div>
+    <div class="arrowbox" aria-hidden="true"><svg class="i"><use href="#i-arrow-right"/></svg></div>
+  </header>
+
+  <main>
+    <section class="checkin" aria-labelledby="drop-h">
+      <div class="drop" id="drop">
+        <div class="pic" aria-hidden="true"><svg class="i box"><use href="#i-luggage"/></svg><svg class="i up"><use href="#i-arrow-down"/></svg></div>
+        <div>
+          <h2 id="drop-h">Drop images here</h2>
+          <p class="sub" data-default="Or browse for files. One image opens the editor, several open Bulk convert.">Or browse for files. One image opens the editor, several open Bulk convert.</p>
+          <div class="acts">
+            <label class="btn" tabindex="0" id="browse"><svg class="i"><use href="#i-upload"/></svg>Browse<input class="sr" type="file" id="file" accept="image/*" multiple tabindex="-1"></label>
+            <button class="btn btn--white" id="paste" type="button" hidden><svg class="i"><use href="#i-paste"/></svg>Paste</button>
+          </div>
+        </div>
+      </div>
+      <span class="nameplate">Check-in</span>
+    </section>
+
+    <section class="board-demo on-black" aria-labelledby="try-h">
+      <h2 id="try-h">Or try one of these:</h2>
+      <ul class="demos">
+        <li><a class="demo" href="editor.html?img=photo"><span class="th"><img src="../assets/photo.jpg" alt="Landscape photograph"></span><span class="nm">Large photo</span><span class="flap" data-flap="2.8 MB" style="--fs:1.3rem">2.8 MB</span><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow-right"/></svg></span></a></li>
+        <li><a class="demo" href="editor.html?img=art"><span class="th"><img src="../assets/artwork.jpg" alt="Painted artwork"></span><span class="nm">Artwork</span><span class="flap" data-flap="2.9 MB">2.9 MB</span><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow-right"/></svg></span></a></li>
+        <li><a class="demo" href="editor.html?img=screen"><span class="th"><img src="../assets/screen.jpg" alt="Phone screenshot"></span><span class="nm">Device screen</span><span class="flap" data-flap="1.6 MB">1.6 MB</span><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow-right"/></svg></span></a></li>
+        <li><a class="demo" href="editor.html?img=svg"><span class="th"><svg viewBox="0 0 64 64" role="img" aria-label="Squoosh logo mark"><rect width="64" height="64" fill="#0B0B0B"/><path d="M14 20l14 12-14 12M50 20L36 32l14 12" fill="none" stroke="#FFD400" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nm">SVG icon</span><span class="flap" data-flap="13 kB">13 kB</span><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow-right"/></svg></span></a></li>
+      </ul>
+    </section>
+
+    <section class="signs" aria-label="About Squoosh">
+      <article class="signp"><div class="pict" aria-hidden="true"><svg class="i"><use href="#i-compress"/></svg></div><h3>Small</h3><p>Smaller images mean faster load times. Squoosh can reduce file size and maintain high quality.</p><span class="arr" aria-hidden="true"><svg class="i"><use href="#i-arrow-right"/></svg></span></article>
+      <article class="signp"><div class="pict" aria-hidden="true"><svg class="i"><use href="#i-pointer"/></svg></div><h3>Simple</h3><p>Open your image, inspect the differences, then save instantly. Feeling adventurous? Adjust the settings for even smaller files.</p><span class="arr" aria-hidden="true"><svg class="i"><use href="#i-arrow-right"/></svg></span></article>
+      <article class="signp"><div class="pict" aria-hidden="true"><svg class="i"><use href="#i-lock"/></svg></div><h3>Secure</h3><p>Worried about privacy? Images never leave your device since Squoosh does all the work locally.</p><span class="arr" aria-hidden="true"><svg class="i"><use href="#i-door"/></svg></span></article>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <a href="#privacy">Privacy</a>
+    <a href="https://github.com/GoogleChromeLabs/squoosh">Source on Github</a>
+    <a href="https://github.com/GoogleChromeLabs/squoosh">fork of Squoosh</a>
+    <button class="btn btn--yellow" id="install" type="button"><svg class="i"><use href="#i-download"/></svg>Install</button>
+  </footer>
+</div>
+<div class="snack" id="snack" role="status" aria-live="polite" hidden><span id="snack-t">No image found in the clipboard</span></div>
+<script src="app.js"></script>
+</body></html>

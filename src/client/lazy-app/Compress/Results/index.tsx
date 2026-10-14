@@ -5,7 +5,7 @@ import 'add-css:./style.css';
 import 'shared/custom-els/loading-spinner';
 import { SourceImage } from '../';
 import prettyBytes from './pretty-bytes';
-import { Arrow, DownloadIcon } from 'client/lazy-app/icons';
+import { Arrow, DownloadIcon, LeafIcon, LockIcon } from 'client/lazy-app/icons';
 
 interface Props {
   loading: boolean;
@@ -14,6 +14,8 @@ interface Props {
   downloadUrl?: string;
   flipSide: boolean;
   typeLabel: string;
+  /** Phones: a compact sticky bar showing 'before → after' and Download. */
+  bar?: boolean;
 }
 
 interface State {
@@ -45,7 +47,7 @@ export default class Results extends Component<Props, State> {
   }
 
   render(
-    { source, imageFile, downloadUrl, flipSide, typeLabel }: Props,
+    { source, imageFile, downloadUrl, flipSide, typeLabel, bar }: Props,
     { showLoadingState }: State,
   ) {
     const prettySize = imageFile && prettyBytes(imageFile.size);
@@ -59,69 +61,119 @@ export default class Results extends Component<Props, State> {
       percent = diff > 1 ? absolutePercent - 100 : 100 - absolutePercent;
     }
 
+    const kind = this.kindSentence(isOriginal, diff, percent);
+    const popped = !isOriginal && !showLoadingState && !!diff && diff < 1;
+
+    if (bar) {
+      const before = source && prettyBytes(source.file.size);
+      return (
+        <div class={style.bar} aria-live="polite">
+          <div class={style.barText}>
+            <div class={style.barSizes}>
+              {!isOriginal && before && (
+                <Fragment>
+                  <span class={style.barBefore}>
+                    {before.value} {before.unit}
+                  </span>
+                  <svg
+                    class={style.barArrow}
+                    viewBox="0 0 24 24"
+                    aria-label="to"
+                    role="img"
+                  >
+                    <path d="M5 12h14M13 6l6 6-6 6" />
+                  </svg>
+                </Fragment>
+              )}
+              <span class={style.barAfter}>
+                {prettySize ? `${prettySize.value} ${prettySize.unit}` : '…'}
+              </span>
+            </div>
+            <p class={style.barVerdict}>
+              {showLoadingState ? 'Making it smaller…' : kind}
+            </p>
+          </div>
+          <a
+            class={showLoadingState ? style.downloadDisable : style.download}
+            href={downloadUrl}
+            download={imageFile ? imageFile.name : ''}
+            aria-disabled={showLoadingState ? 'true' : undefined}
+          >
+            <span class={style.downloadIcon}>
+              <DownloadIcon />
+            </span>
+            <span class={style.downloadText}>Download</span>
+            {showLoadingState && <loading-spinner />}
+          </a>
+        </div>
+      );
+    }
+
     return (
       <div
-        class={
-          (flipSide ? style.resultsRight : style.resultsLeft) +
-          ' ' +
-          (isOriginal ? style.isOriginal : '')
-        }
+        class={`${style.results} ${isOriginal ? style.isOriginal : ''}`}
+        aria-live="polite"
       >
         <div class={style.expandArrow}>
           <Arrow />
         </div>
-        <div class={style.bubble}>
-          <div class={style.bubbleInner}>
-            <div class={style.sizeInfo}>
-              <div class={style.fileSize}>
-                {prettySize ? (
-                  <Fragment>
-                    {prettySize.value}{' '}
-                    <span class={style.unit}>{prettySize.unit}</span>
-                    <span class={style.typeLabel}> {typeLabel}</span>
-                  </Fragment>
-                ) : (
-                  '…'
-                )}
-              </div>
+        <div class={style.summary}>
+          <span class={style.typeLabel}>{typeLabel}</span>
+          <div class={style.sizeRow}>
+            <div class={style.fileSize}>
+              {prettySize ? (
+                <Fragment>
+                  {prettySize.value}{' '}
+                  <span class={style.unit}>{prettySize.unit}</span>
+                </Fragment>
+              ) : (
+                '…'
+              )}
             </div>
-            <div class={style.percentInfo}>
-              <svg
-                viewBox="0 0 1 2"
-                class={style.bigArrow}
-                preserveAspectRatio="none"
-              >
-                <path d="M1 0v2L0 1z" />
-              </svg>
-              <div class={style.percentOutput}>
-                {diff && diff !== 1 && (
-                  <span class={style.sizeDirection}>
-                    {diff < 1 ? '↓' : '↑'}
-                  </span>
-                )}
-                <span class={style.sizeValue}>{percent || 0}</span>
-                <span class={style.percentChar}>%</span>
-              </div>
-            </div>
+            {popped && (
+              <span class={style.leaf} key={downloadUrl}>
+                <LeafIcon />
+              </span>
+            )}
           </div>
+          {showLoadingState ? (
+            <p class={style.verdict}>Making it smaller…</p>
+          ) : (
+            kind && <p class={style.verdict}>{kind}</p>
+          )}
         </div>
+        <p class={style.stays}>
+          <LockIcon />
+          Stays on your device
+        </p>
         <a
-          class={showLoadingState ? style.downloadDisable : style.download}
+          class={
+            (showLoadingState ? style.downloadDisable : style.download) +
+            (isOriginal || !flipSide ? ' ' + style.secondary : '')
+          }
           href={downloadUrl}
           download={imageFile ? imageFile.name : ''}
-          title="Download"
+          aria-disabled={showLoadingState ? 'true' : undefined}
         >
-          <svg class={style.downloadBlobs} viewBox="0 0 89.6 86.9">
-            <title>Download</title>
-            <path d="M27.3 72c-8-4-15.6-12.3-16.9-21-1.2-8.7 4-17.8 10.5-26s14.4-15.6 24-16 21.2 6 28.6 16.5c7.4 10.5 10.8 25 6.6 34S64.1 71.8 54 73.6c-10.2 2-18.7 2.3-26.7-1.6z" />
-            <path d="M19.8 24.8c4.3-7.8 13-15 21.8-15.7 8.7-.8 17.5 4.8 25.4 11.8 7.8 6.9 14.8 15.2 14.7 24.9s-7.1 20.7-18 27.6c-10.8 6.8-25.5 9.5-34.2 4.8S18.1 61.6 16.7 51.4c-1.3-10.3-1.3-18.8 3-26.6z" />
-          </svg>
-          <div class={style.downloadIcon}>
+          <span class={style.downloadIcon}>
             <DownloadIcon />
-          </div>
+          </span>
+          <span class={style.downloadText}>Download</span>
           {showLoadingState && <loading-spinner />}
         </a>
       </div>
     );
+  }
+
+  private kindSentence(
+    isOriginal: boolean,
+    diff: number | undefined,
+    percent: number | undefined,
+  ): string {
+    if (isOriginal || !diff) return '';
+    if (!percent) return 'About the same size as the original';
+    return diff < 1
+      ? `${percent}% smaller`
+      : `${percent}% bigger than the original`;
   }
 }

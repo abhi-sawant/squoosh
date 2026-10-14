@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Squoosh bulk convert</title>
+<meta name="theme-color" content="#2038ff">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,100..900&family=Schibsted+Grotesk:wght@400..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="bulk">
+<script src="app.js"></script>
+
+<header class="top">
+  <a class="btn" href="index.html"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg>Back</a>
+  <h1 class="sq" style="--w:80;--wg:900">Bulk convert</h1>
+  <span class="grow file-meta" id="subhead">12 images · 7 converted</span>
+</header>
+
+<div class="bulk">
+  <section class="bulk-main" aria-label="Images">
+    <div class="saved">
+      <p class="sq headline" id="saved-line" style="--w:60">Saved <span class="lime-t" id="saved-fig">17.4 MB</span></p>
+      <p class="detail" id="saved-detail"></p>
+      <div class="cells" id="cells" role="img" aria-label="Progress: 7 of 12 converted"></div>
+    </div>
+    <ul class="grid" id="grid"></ul>
+  </section>
+
+  <aside class="bulk-rail" aria-label="Shared options for all images">
+    <div class="rail-h">These settings apply to every image.</div>
+    <section class="slab">
+      <div class="slab-h"><h3>Encoder</h3></div>
+      <div class="slab-b">
+        <div class="field"><label class="lbl" for="b-enc">Format</label>
+          <select id="b-enc" data-k="enc"><option value="mozjpeg">MozJPEG</option><option value="webp">WebP</option><option value="avif">AVIF</option><option value="jxl">JPEG XL (beta)</option><option value="webp2">WebP v2 (unstable)</option><option value="oxipng">OxiPNG</option><option value="qoi">QOI</option><option value="bpng">Browser PNG</option><option value="bjpeg">Browser JPEG</option><option value="bgif">Browser GIF</option></select></div>
+      </div>
+    </section>
+    <section class="slab">
+      <div class="slab-h"><h3>Resize</h3><input type="checkbox" data-k="resize" aria-label="Enable resize" checked></div>
+      <div class="slab-b">
+        <div class="field"><label class="lbl" for="b-scale">Scale <span class="val" data-out="scale">50%</span></label><input id="b-scale" type="range" min="1" max="100" value="50" data-k="scale"></div>
+      </div>
+    </section>
+    <section class="slab">
+      <div class="slab-h"><h3>Reduce palette</h3><input type="checkbox" data-k="palette" aria-label="Enable palette reduction"></div>
+      <div class="slab-b" hidden>
+        <div class="field"><label class="lbl" for="b-colors">Colors <span class="val" data-out="colors">256</span></label><input id="b-colors" type="range" min="2" max="256" value="256" data-k="colors"></div>
+        <div class="field"><label class="lbl" for="b-dither">Dithering <span class="val" data-out="dither">100%</span></label><input id="b-dither" type="range" min="0" max="100" value="100" data-k="dither"></div>
+      </div>
+    </section>
+    <section class="slab">
+      <div class="slab-h"><h3>Compress</h3></div>
+      <div class="slab-b">
+        <div class="field"><label class="lbl" for="b-q">Quality <span class="val" data-out="q">75</span></label><input id="b-q" type="range" min="0" max="100" value="75" data-k="q"></div>
+        <label class="chk">Advanced settings <input type="checkbox" data-k="adv"></label>
+        <div data-adv hidden>
+          <div class="field"><label class="lbl" for="b-ch">Channels</label><select id="b-ch"><option>YCbCr</option><option>Grayscale</option><option>RGB</option></select></div>
+          <label class="chk">Progressive rendering <input type="checkbox" checked></label>
+          <label class="chk">Optimize Huffman table <input type="checkbox" checked></label>
+          <div class="field"><label class="lbl" for="b-sm">Smoothing <span class="val" data-out="sm">0</span></label><input id="b-sm" type="range" min="0" max="100" value="0" data-k="sm"></div>
+        </div>
+      </div>
+    </section>
+    <div class="spacer"></div>
+    <div class="actions">
+      <button class="bar bar-lime" type="button" id="convert"><span id="convert-l">Convert all</span><svg class="ic" aria-hidden="true"><use href="#i-mark"/></svg></button>
+      <button class="bar bar-ghost" type="button" id="zip" disabled><span id="zip-l">Download all (ZIP)</span><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg></button>
+    </div>
+  </aside>
+</div>
+
+<dialog class="modal" id="modal" aria-labelledby="m-title">
+  <div class="modal-h"><h2 id="m-title">photo.jpg</h2><button class="tool" type="button" id="m-close" aria-label="Close comparison"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+  <div class="compare" id="m-cmp" data-orient="h">
+    <div class="layer base"><img id="m-l" src="../assets/photo.jpg" alt="Original image"></div>
+    <div class="layer top"><img id="m-r" src="../assets/photo.jpg" alt="Converted image"></div>
+    <span class="tag l">Original</span><span class="tag r" id="m-tag">MozJPEG 75</span>
+    <button class="handle" type="button" role="slider" aria-label="Comparison divider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="knob"><svg class="ic" aria-hidden="true"><use href="#i-sbs-arrows"/></svg></span></button>
+  </div>
+  <div class="tickets">
+    <div class="ticket"><div class="lab">Original</div><div class="row"><div class="sq fig" style="--w:150;--wg:800" id="m-o">2.8 MB</div></div></div>
+    <div class="ticket" id="m-tk"><div class="lab"><svg class="ic spin" aria-hidden="true"><use href="#i-spinner"/></svg>Converted</div><div class="row"><div class="sq fig" style="--w:78;--wg:800" id="m-n">214 kB</div><span class="pct" id="m-p">92% smaller</span></div></div>
+  </div>
+  <div class="mopts">
+    <div class="field"><label class="lbl" for="m-q">Quality <span class="val" data-out="mq">75</span></label><input id="m-q" type="range" min="0" max="100" value="75"></div>
+    <div class="field"><label class="lbl" for="m-enc">Format</label><select id="m-enc"><option value="mozjpeg">MozJPEG</option><option value="webp">WebP</option><option value="avif">AVIF</option></select></div>
+  </div>
+</dialog>
+
+<div class="snackbar" id="snackbar" role="status" aria-live="polite"></div>
+</body>
+</html>
