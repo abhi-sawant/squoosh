@@ -129,7 +129,9 @@ export default async function ({ watch }) {
             resolve(),
             replace({ __PRERENDER__: false, __PRODUCTION__: isProduction }),
             entryDataPlugin(),
-            isProduction ? terser({ module: true }) : {},
+            isProduction
+              ? terser({ module: true, format: { ascii_only: true } })
+              : {},
           ],
           preserveEntrySignatures: false,
         },
